@@ -1,11 +1,17 @@
 Klasa Korisnik koja ima atribute korisnicko ime i lozinka
-Mozda treba i niz kurseva za svakog korisnika, da bude protected pa da ga Student i Predavac koriste
+Mozda treba i niz kurseva za svakog korisnika, da bude protected pa da ga Student i Predavac koriste, vjerovatno dobra implementacija
+I ovdje bi niz kurseva potencijalno bilo dobro da koristi neku STL funkcionalnost
 Podklase Student i Predavac uz dodatne funkcionalnosti
+PRILIKOM OCITAVANJA NEKOG STUDENTA ILI PREDAVACA IZ FAJLA AZURIRA SE NIZ KURSEVA, kasnije implementacija
 
 Klasa Kurs sadrzi upisane studente (niz studenata), cuva ih u fajlu, u nekom folderu za taj specifican kurs
-Klasa Kurs ima i svog Predavaca
-Mozda bi najbolje bilo realizovati tako da Predavac bude vec upisan u neki fajl
+Niz studenata ne mora biti moj niz, nego koristiti nesto iz STL biblioteke, vektor ili listu radi lakse manipulacije i manje koda!
+Pri svakom ocitavanju u main funkciji, niz studenata za kurs se nadopunjuje, tako da imamo isto stanje TO SE REALIZUJE KASNIJE
+Klasa Kurs ima i svog Predavaca, te se i on ocitava iz neke datoteke
+Mozda bi najbolje bilo realizovati tako da Predavac bude vec upisan u neki fajl, ali to je teze realizovati, bolje ga upisati u programu
 Svaki Kurs ima svoj fajl za upisane studente, te ima fajl za zahtjeve za upis
+ 
+U konstruktorima bi bilo dobro realizovati da se provjeri da li vec postoji folder za Studenta/Kurs, ukoliko ne postoji kreira se, ukoliko postoji ucitavaju se potrebni podaci vec sacuvani
 
 Metoda u klasi Korisnik podnesiZahtjev za upis na kurs kao predavac ili student
 Metoda pregledajZahtjeve u klasi Kurs omogucava predavacu (samo jedan predavac) da otvori fajl za zahtjeve upisa i da odobri ili ne
@@ -15,10 +21,12 @@ Studenti imaju metodu da se sprijatelje sa drugim studentom
 Student salje zahtjev, te se taj zahtjev cuva u fajlu drugog studenta kome je zahtjev poslat
 Student ima metodu da otvori zahtjeve, i da prihvati ili odbije prijateljstvo
 Ako prihvati zahtjev, u fajl prijatelji se smjesta student koji je poslao zahtjev, kao i ovaj drugi koji je prihvatio zahtjev u fajl za prvog
-Otkljucava se metoda za slanje poruka, gdje korisnik salje poruku koja se smjeta u fajl, koji drugi korisnik moze otvoriti i vidjeti, te odgovoriti
+Otkljucava se metoda za slanje poruka, koja je prevashodno onemogucena pomocu nekog boola, gdje korisnik salje poruku koja se smjeta u fajl, koji drugi korisnik moze otvoriti i vidjeti, te odgovoriti
+Najbolje bi bilo da svaki student ima svoj cet koji ce biti isti, ali laksa manipulacija podacima
 Za otkljucavanje metode je potrebna neka bool varijabla
 
 Student moze pisati predavacu ukoliko je upisan na kurs.
+Potrebno je da predavac ima inboks, te da odgovori na poruku Studentu, te da svaki student ima fajl za dopisivanje sa tim odredjenim predavacem
 
 -------------------------------------------------------
 
@@ -27,6 +35,7 @@ Administrator ima pristup folderima kurseva i korisnika, te ih moze obrisati po 
 Administrator moze i dodati foldere za kurs ili dodati studenta u folder Studenti ili izmijeniti sadrzaj postojecih foldera i fajlova
 Kada se aplikacija zatvori, perzistencija podataka -> INTERNET
 Serijalizovani podaci -> ISerializable (samo ideja, nisam siguran da treba, auditorne vjezbe)
+Serijalizovani podaci -> Datoteke!
 
 -------------------------------------------------------
 
