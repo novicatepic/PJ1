@@ -1,0 +1,50 @@
+Klasa Korisnik koja ima atribute korisnicko ime i lozinka
+Mozda treba i niz kurseva za svakog korisnika, da bude protected pa da ga Student i Predavac koriste
+Podklase Student i Predavac uz dodatne funkcionalnosti
+
+Klasa Kurs sadrzi upisane studente (niz studenata), cuva ih u fajlu, u nekom folderu za taj specifican kurs
+Klasa Kurs ima i svog Predavaca
+Mozda bi najbolje bilo realizovati tako da Predavac bude vec upisan u neki fajl
+Svaki Kurs ima svoj fajl za upisane studente, te ima fajl za zahtjeve za upis
+
+Metoda u klasi Korisnik podnesiZahtjev za upis na kurs kao predavac ili student
+Metoda pregledajZahtjeve u klasi Kurs omogucava predavacu (samo jedan predavac) da otvori fajl za zahtjeve upisa i da odobri ili ne
+Ako odobri, azurira se taj fajl i student je upisan na kurs
+
+Studenti imaju metodu da se sprijatelje sa drugim studentom
+Student salje zahtjev, te se taj zahtjev cuva u fajlu drugog studenta kome je zahtjev poslat
+Student ima metodu da otvori zahtjeve, i da prihvati ili odbije prijateljstvo
+Ako prihvati zahtjev, u fajl prijatelji se smjesta student koji je poslao zahtjev, kao i ovaj drugi koji je prihvatio zahtjev u fajl za prvog
+Otkljucava se metoda za slanje poruka, gdje korisnik salje poruku koja se smjeta u fajl, koji drugi korisnik moze otvoriti i vidjeti, te odgovoriti
+Za otkljucavanje metode je potrebna neka bool varijabla
+
+Student moze pisati predavacu ukoliko je upisan na kurs.
+
+-------------------------------------------------------
+
+Potrebna je klasa Administrator
+Administrator ima pristup folderima kurseva i korisnika, te ih moze obrisati po potrebi
+Administrator moze i dodati foldere za kurs ili dodati studenta u folder Studenti ili izmijeniti sadrzaj postojecih foldera i fajlova
+Kada se aplikacija zatvori, perzistencija podataka -> INTERNET
+Serijalizovani podaci -> ISerializable (samo ideja, nisam siguran da treba, auditorne vjezbe)
+
+-------------------------------------------------------
+
+Za pronalazenje unije, presjeka ili razlike izmedju skupova studenata na kursu, potrebno je ocitati sve upisane studente iz neke datoteke za ta 2 kursa,
+smjestiti ih u neki niz studenata i porediti elemente, te naci ono sto je trazeno.
+Studenti koji su polozili ispit, potrebna nova funkcionalnost koja ce ih upisati u neki fajl, tako da se oni kasnije mogu ocitati i da se mogu naci unija, presjek ili razlika.
+Filtriranje poruka u fajlu se moze izvrsiti substringovima, gdje se ocitaju poruke i vrsi se poredjenje, ukoliko postoji substring, ocita se poruka i prikaze se, u suprotnom ne.
+
+-------------------------------------------------------
+
+Potrebna je nova funkcionalnost, lambda izraz ili jos bolje niz pokazivaca na funkcije.
+Ukoliko ove funkcije koje vracaju bool ispunjavaju sve uslove, student se smije upisati na kurs, te se sve to cuva u toj odredjenoj datoteci/fajlu.
+Potrebno je implementirati 4 funkcije koje su naglasene.
+
+------------------------------------------------------
+
+Potrebno je realizovati klasu Graf ili naci vec gotovo implementaciju ukoliko postoji u c++ stlu (sumnjam da ima)
+Koristi se matricna reprezentacija, te se pomocu BFS obilaska od datog cvora(studenta) do datog cvora(studenta) dobija najkraca putanja (radjeno na SPA)
+Da bi se ispunio ovaj uslov da prva osoba pohadja kurs A, a druga B, mora se vrsiti vise obilazaka, i imati neka promjenljiva double koja ce se apdejtovati da bi se racunala srednja vrijednost.	 
+
+
