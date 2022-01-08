@@ -12,7 +12,7 @@ private:
 	std::vector<Student> studentArray;
 	Lecturer lecturer;
 public:
-	Course(std::string courseName, Lecturer l);
+	Course(std::string courseName);
 
 	Lecturer returnLecturer() const;
 

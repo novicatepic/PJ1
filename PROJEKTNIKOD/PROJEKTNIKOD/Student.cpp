@@ -44,6 +44,20 @@ void Student::signToCourse(std::string courseName) const noexcept(false) {
 	}
 }
 
+void Student::addStudentDirectlyToCourse(std::string courseName) {
+	try {
+		if (checkIfIsInsideCourse(courseName)) {
+			throw std::exception("This course doens't exist or student is already inside this course!");
+		}
+		auto writeToCourse = std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::out | std::ios::app);
+		writeToCourse << *this;
+		writeToCourse.close();
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+}
+
 bool Student::checkIfIsInsideCourse(std::string courseName) const {
 	auto readFile = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::in);
 	if (!readFile) {

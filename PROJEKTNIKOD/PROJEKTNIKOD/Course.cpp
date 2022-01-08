@@ -3,7 +3,7 @@
 #include <fstream>
 #include <filesystem>
 
-Course::Course(std::string courseName, Lecturer l) : courseName(courseName), lecturer(l) {
+Course::Course(std::string courseName) : courseName(courseName) {
 	auto openCourse = std::ifstream("./KURSEVI/" + courseName + "STUDENTI.txt", std::ios::in);
 	if (!openCourse) {
 
@@ -26,7 +26,7 @@ Course::Course(std::string courseName, Lecturer l) : courseName(courseName), lec
 		makeFiles.close();
 		makeFiles = std::ofstream("./KURSEVI/" + courseName + "/STUDENTCHAT/" + "INBOX.txt");*/
 		makeFiles.close();
-		l.signLecturerToCourse(courseName);
+		//l.signLecturerToCourse(courseName);
 	}
 	else {
 		while (openCourse.good()) {

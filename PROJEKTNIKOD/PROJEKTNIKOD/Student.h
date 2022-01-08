@@ -14,12 +14,12 @@ public:
 
 	void sendFriendRequest(std::string userName) const;
 	void checkFriendRequests() const;
+
 	//void textFriend(std::string friendName) const;
 
+	void addStudentDirectlyToCourse(std::string courseName);
+
 	void automaticLecturerFriend(std::string s1, std::string s2) const;
-
-	//void textLecturer(std::string courseName) const;
-
 protected:
 
 

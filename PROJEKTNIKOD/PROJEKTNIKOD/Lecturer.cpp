@@ -4,6 +4,37 @@
 #include <vector>
 #include <filesystem>
 
+size_t howManyStudents(std::string courseName) {
+	auto readFile = std::ifstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt", std::ios::in);
+	size_t studentCounter = 0;
+	if (readFile) {
+		while (readFile.good()) {
+			User u;
+			readFile >> u;
+			if (u.getUserName() != "" && u.getPassword() != "" && u.getType() == "Student") {
+				studentCounter++;
+			}
+		}
+	}
+	return studentCounter;
+}
+
+size_t howManyLecturers(std::string courseName) {
+	size_t counter = 0;
+	auto readHowManyLecturers = std::ifstream("./KURSEVI/" + courseName + "/PREDAVAC.txt", std::ios::in);
+	if (readHowManyLecturers) {
+		while (readHowManyLecturers.good()) {
+			User u;
+			readHowManyLecturers >> u;
+			if (u.getUserName() != "" && u.getPassword() != "" && u.getType() == "Lecturer") {
+				counter++;
+			}
+		}
+	}
+	readHowManyLecturers.close();
+	return counter;
+}
+
 Lecturer::Lecturer(std::string userName, std::string password) : User(userName, password) {
 	this->setType("Lecturer");
 
@@ -19,7 +50,7 @@ Lecturer::Lecturer(std::string userName, std::string password) : User(userName, 
 		//write << *this;
 	}
 
-	if (!checkIfUserIsAlreadyInAFile(userName, password)) {
+	if (!checkIfUserIsAlreadyInAFile(userName, password) && userName != "") {
 		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
 		writeUsers << *this;
 		writeUsers.close();
@@ -70,40 +101,7 @@ void Lecturer::signStudentToCourse(std::string courseName) {
 	rewriteRequests.close();
 }
 
-void Lecturer::writeStudentToFile(std::string courseName) {
 
-}
-
-size_t Lecturer::howManyStudents(std::string courseName) {
-	auto readFile = std::ifstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt", std::ios::in);
-	size_t studentCounter = 0;
-	if (readFile) {
-		while (readFile.good()) {
-			User u;
-			readFile >> u;
-			if (u.getUserName() != "" && u.getPassword() != "" && u.getType() == "Student") {
-				studentCounter++;
-			}
-		}
-	}
-	return studentCounter;
-}
-
-size_t Lecturer::howManyLecturers(std::string courseName) {
-	size_t counter = 0;
-	auto readHowManyLecturers = std::ifstream("./KURSEVI/" + courseName + "/PREDAVAC.txt", std::ios::in);
-	if (readHowManyLecturers) {
-		while (readHowManyLecturers.good()) {
-			User u;
-			readHowManyLecturers >> u;
-			if (u.getUserName() != "" && u.getPassword() != "" && u.getType() == "Lecturer") {
-				counter++;
-			}
-		}
-	}
-	readHowManyLecturers.close();
-	return counter;
-}
 
 void Lecturer::signLecturerToCourse(std::string courseName) {
 	try {

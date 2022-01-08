@@ -3,6 +3,7 @@
 #include "User.h"
 #include "Lecturer.h"
 #include "Course.h"
+#include "Administrator.h"
 #include <fstream>
 
 auto sign() {
@@ -61,19 +62,22 @@ int main() {
 
 	//s2.checkInbox();
 
-	Course c("Matematika", l);
+	Course c("Matematika");
 	st.signToCourse("Matematika");
-	l.signStudentToCourse("Matematika");
+	//l.signStudentToCourse("Matematika");
 
 	//std::cin.ignore();
-	st.textFriend(l.getUserName());
+	//st.textFriend(l.getUserName());
 	//std::cin.ignore();
 
-	l.checkInbox();
+	//l.checkInbox();
 	
-	l.textFriend(st.getUserName());
+	//l.textFriend(st.getUserName());
 
-	st.checkInbox();
+	//st.checkInbox();
+
+	Administrator a;
+	a.removeCourse();
 
 	return 0;
 }
