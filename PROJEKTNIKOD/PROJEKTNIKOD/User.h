@@ -16,7 +16,6 @@ public:
 	std::string getPassword() const;
 	std::string getType() const;
 
-
 	friend std::istream& operator>>(std::ifstream& ifs, User& rhs)
 	{
 		char delim = ',';
@@ -27,15 +26,22 @@ public:
 		//ifs.ignore();
 		return ifs;
 	}
+
 	friend std::ostream& operator<<(std::ofstream& ofs, const User& rhs)
 	{
 		return ofs << rhs.type << ',' << rhs.userName << ',' << rhs.password << std::endl;
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const User& rhs) {
-		return os << rhs.type << ',' << rhs.userName << ',' << rhs.password << std::endl;
+		if (rhs.type != "" && rhs.userName != "" && rhs.password != "") {
+			return os << rhs.type << ',' << rhs.userName << std::endl;
+		}
 	}
+
+	void checkInbox() const;
 
 protected:
 	void setType(std::string type);
+
+	bool checkIfUserIsAlreadyInAFile(std::string userName, std::string password) const;
 };

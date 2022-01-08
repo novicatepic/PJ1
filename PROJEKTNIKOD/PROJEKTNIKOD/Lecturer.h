@@ -14,6 +14,9 @@ public:
 	void signStudentToCourse(std::string courseName);
 	void writeStudentToFile(std::string courseName);
 
+	void signLecturerToCourse(std::string courseName);
+
 private:
 	size_t howManyStudents(std::string courseName);
+	size_t howManyLecturers(std::string courseName);
 };

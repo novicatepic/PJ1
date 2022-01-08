@@ -1,0 +1,4 @@
+Student,Marko,Markovic
+Student,Janko,Jankovic
+Lecturer,Zoren,12345
+Lecturer,Markan,222

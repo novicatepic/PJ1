@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Administrator.h" />
     <ClInclude Include="Course.h" />
     <ClInclude Include="Lecturer.h" />
     <ClInclude Include="Student.h" />

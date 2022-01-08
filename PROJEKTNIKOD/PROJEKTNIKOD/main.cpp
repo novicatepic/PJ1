@@ -5,20 +5,37 @@
 #include "Course.h"
 #include <fstream>
 
+auto sign() {
+	auto readUsers = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
+	if (readUsers) {
+		std::string userName, pass;
+		std::cout << "Enter user name :" << std::endl;
+		std::cin >> userName;
+		std::cout << "Enter password: " << std::endl;
+		std::cin >> pass;
+
+		try {
+			while (readUsers.good()) {
+				User u;
+				readUsers >> u;
+				if (u.getUserName() == userName && u.getPassword() == pass && u.getUserName() != "") {
+					readUsers.close();
+					return u;
+				}
+			}
+			throw std::exception("Your account doesn't exist, sorry");
+		}
+		catch (const std::exception& e) {
+			std::cout << e.what() << std::endl;
+			readUsers.close();
+			User u;
+			return u;
+		}
+	}
+}
+
 int main() {
 	Student st("Marko", "Markovic");
-	auto upisi = std::ofstream("./KURSEVI/STUDENTI.txt", std::ios::out);
-	upisi << st;
-	upisi << st;
-	upisi << st;
-	upisi.close();
-	auto citaj = std::ifstream("./KURSEVI/STUDENTI.txt", std::ios::in);
-	citaj.close();
-	/*while (citaj.good()) {
-		citaj >> s2;
-		std::cout << s2.getUserName() << s2.getPassword();
-		std::cout << std::endl;
-	}*/
 
 	//st.signToCourse("Programiranje");
 	//Course c("Programiranje");
@@ -26,7 +43,26 @@ int main() {
 	//l.signStudentToCourse("Programiranje");
 	
 	Student s2("Janko", "Jankovic");
-	st.sendFriendRequest("Janko");
+	//st.sendFriendRequest("Janko");
+	//s2.checkFriendRequests();
+	//st.textFriend("Janko");
+	Lecturer l("Zoren", "12345");
+	Lecturer l2("Markan", "222");
+
+	//User u = sign();
+
+	//User u;
+
+	//u = sign();
+	//Student s(u.getUserName(), u.getPassword());
+	//s.checkInbox();
+
+	//l.signLecturerToCourse("Programiranje");
+
+	//s2.checkInbox();
+
+	Course c("Matematika", l);
+	st.signToCourse("Matematika");
 
 	return 0;
 }
