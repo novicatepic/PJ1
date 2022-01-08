@@ -6,21 +6,27 @@
 Course::Course(std::string courseName, Lecturer l) : courseName(courseName), lecturer(l) {
 	auto openCourse = std::ifstream("./KURSEVI/" + courseName + "STUDENTI.txt", std::ios::in);
 	if (!openCourse) {
+
 		//std::cout << "This course doesn't exist!" << std::endl;
 		namespace fs = std::filesystem;
 		fs::path path = std::filesystem::current_path();
 		fs::path courseFolderPath = path / "KURSEVI" / this->courseName;
 		create_directory(courseFolderPath);
-		courseFolderPath = path / "KURSEVI" / this->courseName / "PREDAVACCHAT";
+		/*courseFolderPath = path / "KURSEVI" / this->courseName / "PREDAVACCHAT";
 		create_directory(courseFolderPath);
 		courseFolderPath = path / "KURSEVI" / this->courseName / "STUDENTCHAT";
-		create_directory(courseFolderPath);
+		create_directory(courseFolderPath);*/
 		auto makeFiles = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
 		makeFiles.close();
 		makeFiles = std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt");
 		makeFiles.close();
 		makeFiles = std::ofstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt");
 		makeFiles.close();
+		/*makeFiles = std::ofstream("./KURSEVI/" + courseName + "/PREDAVACCHAT/" + "INBOX.txt");
+		makeFiles.close();
+		makeFiles = std::ofstream("./KURSEVI/" + courseName + "/STUDENTCHAT/" + "INBOX.txt");*/
+		makeFiles.close();
+		l.signLecturerToCourse(courseName);
 	}
 	else {
 		while (openCourse.good()) {

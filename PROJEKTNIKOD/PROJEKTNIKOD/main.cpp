@@ -63,6 +63,17 @@ int main() {
 
 	Course c("Matematika", l);
 	st.signToCourse("Matematika");
+	l.signStudentToCourse("Matematika");
+
+	//std::cin.ignore();
+	st.textFriend(l.getUserName());
+	//std::cin.ignore();
+
+	l.checkInbox();
+	
+	l.textFriend(st.getUserName());
+
+	st.checkInbox();
 
 	return 0;
 }

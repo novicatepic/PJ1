@@ -39,6 +39,7 @@ public:
 	}
 
 	void checkInbox() const;
+	void textFriend(std::string friendName) const;
 
 protected:
 	void setType(std::string type);

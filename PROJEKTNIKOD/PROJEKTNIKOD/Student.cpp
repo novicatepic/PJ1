@@ -80,6 +80,18 @@ void Student::sendFriendRequest(std::string userName) const {
 	}
 }
 
+void Student::automaticLecturerFriend(std::string s1, std::string s2) const {
+	auto writeFriend = std::ofstream("./STUDENTI/" + this->userName + "/FRIENDS.txt", std::ios::out | std::ios::app);
+	auto writeLecturerFriend = std::ofstream("./STUDENTI/" + s1 + "/FRIENDS.txt", std::ios::out | std::ios::app);
+	if (writeFriend) {
+		Lecturer l(s1, s2);
+		writeFriend << l;
+		writeLecturerFriend << *this;
+	}
+	writeFriend.close();
+	writeLecturerFriend.close();
+}
+
 void Student::checkFriendRequests() const {
 	auto openFriendRequests = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDREQUESTS.TXT", std::ios::in);
 	std::vector<User> users;
@@ -136,7 +148,7 @@ void Student::checkFriendRequests() const {
 	}
 }
 
-void Student::textFriend(std::string friendName) const {
+/*void Student::textFriend(std::string friendName) const {
 	auto openFriends = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDS.TXT", std::ios::in);
 	std::vector<Student> friends;
 	while (openFriends.good()) {
@@ -160,13 +172,24 @@ void Student::textFriend(std::string friendName) const {
 			throw std::exception("This student is not your friend!");
 		}
 
+
+
 		auto chatFile = std::ofstream("./STUDENTI/" + this->userName + "/CHATS/" + friendName + ".txt", std::ios::out | std::ios::app);
-		auto chatFriendFile = std::ofstream("./STUDENTI/" + friendName + "/CHATS/" + this->getUserName() + ".txt", std::ios::out | std::ios::app);
-		auto inboxFriendFile = std::ofstream("./STUDENTI/" + friendName + "/CHATS/" + "INBOX.txt", std::ios::out | std::ios::app);
+		
+		std::ofstream chatFriendFile;
+		std::ofstream inboxFriendFile;
+
+		/*if (checkIfIsLecturer(courseName, friendName)) {
+			chatFriendFile = std::ofstream("./KURSEVI/" + courseName + "/PREDAVACCHAT/" + this->userName + ".txt", std::ios::out | std::ios::app);
+			inboxFriendFile = std::ofstream("./KURSEVI/" + courseName + "/PREDAVACCHAT/" + "INBOX.txt", std::ios::out | std::ios::app);
+		}
+			chatFriendFile = std::ofstream("./STUDENTI/" + friendName + "/CHATS/" + this->getUserName() + ".txt", std::ios::out | std::ios::app);
+			inboxFriendFile = std::ofstream("./STUDENTI/" + friendName + "/CHATS/" + "INBOX.txt", std::ios::out | std::ios::app);
+
 		if (chatFile) {
 			std::cout << "Enter your message: " << std::endl;
 			std::string message;
-			std::cin.ignore();
+			//std::cin.ignore();
 			std::getline(std::cin, message, '\n');
 			chatFile << this->getUserName() << ": " << std::endl;
 			chatFile << message << std::endl;
@@ -183,18 +206,44 @@ void Student::textFriend(std::string friendName) const {
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}
+}*/
+
+bool Student::checkIfIsLecturer(std::string course, std::string name) const {
+	auto textFile = std::ifstream("./KURSEVI/" + course + "PREDAVAC.txt", std::ios::in);
+	if (textFile) {
+		Lecturer l;
+		textFile >> l;
+		if (l.getUserName() == name)
+			return true;
+	}
+
+	return false;
 }
 
-void Student::textLecturer(std::string courseName) const {
+/*void Student::textLecturer(std::string courseName) const {
 	try {
 		if (checkIfIsInsideCourse(courseName)) {
 			throw std::exception("This student is not in this course!");
 		}
 
+		auto textFile = std::ofstream("./KURSEVI/" + courseName + "/PREDAVACCHAT/" + this->userName + ".txt", std::ios::out | std::ios::app);
+		auto textStudentFile = std::ofstream("./KURSEVI/" + courseName + "/STUDENTCHAT/" + "Predavac" + ".txt", std::ios::out | std::ios::app);
 
-
+		if (textFile && textStudentFile) {
+			std::cout << "Enter your message: " << std::endl;
+			std::string message;
+			//std::cin.ignore();
+			std::getline(std::cin, message, '\n');
+			textFile << this->getUserName() << ": " << std::endl;
+			textFile << message << std::endl;
+			textStudentFile << this->getUserName() << ": " << std::endl;
+			textStudentFile << message << std::endl;
+		}
+		textFile.close();
+		textStudentFile.close();
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}
-}
+}*/
+

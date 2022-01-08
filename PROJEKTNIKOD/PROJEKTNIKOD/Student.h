@@ -1,5 +1,6 @@
 #pragma once
 #include "User.h"
+#include "Lecturer.h"
 #include <fstream>
 #include <string>
 
@@ -13,13 +14,16 @@ public:
 
 	void sendFriendRequest(std::string userName) const;
 	void checkFriendRequests() const;
-	void textFriend(std::string friendName) const;
+	//void textFriend(std::string friendName) const;
 
-	void textLecturer(std::string courseName) const;
+	void automaticLecturerFriend(std::string s1, std::string s2) const;
+
+	//void textLecturer(std::string courseName) const;
 
 protected:
 
 
 private:
 	bool checkIfIsInsideCourse(std::string course) const;
+	bool checkIfIsLecturer(std::string course, std::string name) const;
 };
