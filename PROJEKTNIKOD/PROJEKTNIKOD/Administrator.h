@@ -10,6 +10,8 @@ public:
 	void addUserToCourse();
 	void removeUserFromCourse();
 
+	void modifyCourses();
+	void modifyStudents();
 
 	void addNewCourse();
 	void removeCourse();

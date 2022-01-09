@@ -1,1 +1,1 @@
-Lecturer,Majkan,Majkovic
+Lecturer,Zivko,asdsad

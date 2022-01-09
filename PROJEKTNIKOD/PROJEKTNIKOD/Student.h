@@ -21,13 +21,13 @@ public:
 
 	void automaticLecturerFriend(std::string s1, std::string s2) const;
 
-	bool checkIfIsAlreadyAFriend(std::string friendName);
+	bool checkIfIsAlreadyAFriend(std::string friendName) const;
 protected:
 
 
 private:
-	bool checkIfIsInsideCourse(std::string course) const;
-	bool checkIfIsLecturer(std::string course, std::string name) const;
+
+	//bool checkIfIsLecturer(std::string course, std::string name) const;
 	bool checkIfRequestIsAlreadyMade(std::string course, std::string name) const;
-	bool checkIfIsLecturer(std::string courseName) const;
+
 };

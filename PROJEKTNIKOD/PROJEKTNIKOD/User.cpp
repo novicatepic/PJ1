@@ -41,14 +41,14 @@ void User::checkInbox() const {
 	removeInbox.close();
 }
 
-bool User::checkIfUserIsAlreadyInAFile(std::string userName, std::string password, std::string type) const {
+bool User::checkIfUserIsAlreadyInAFile(std::string userName) const {
 	auto readUsers = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
 
 	if (readUsers) {
 		while (readUsers.good()) {
 			User u;
 			readUsers >> u;
-			if (u.getUserName() == userName && u.getPassword() == password && u.getType() == type) {
+			if (u.getUserName() == userName) {
 				readUsers.close();
 				return true;
 			}
@@ -117,4 +117,57 @@ void User::textFriend(std::string friendName) const {
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}
+}
+
+bool User::checkIfIsLecturer(std::string courseName) const {
+	auto courseFile = std::ifstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
+
+	if (courseFile) {
+		User p;
+		courseFile >> p;
+		if (p.getUserName() == this->userName) {
+			return true;
+		}
+	}
+
+	courseFile.close();
+
+	return false;
+}
+
+bool User::checkIfIsEitherStudentOrLecturer(std::string courseName) const {
+	auto courseFile = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt");
+
+	if (courseFile) {
+		while (courseFile.good()) {
+			User u;
+			courseFile >> u;
+			if (u.getUserName() == this->userName)
+				return true;
+		}
+	}
+
+	courseFile.close();
+
+	if (checkIfIsLecturer(courseName) == true)
+		return true;
+
+	return false;
+
+}
+
+bool User::checkUserName() const {
+	auto credentialsFile = std::ifstream("./KORISNICI/" + this->userName + "/Korisnici.txt");
+	if (credentialsFile) {
+		while (credentialsFile.good()) {
+			User u;
+			credentialsFile >> u;
+			if (u.getUserName() == this->userName) {
+				return true;
+			}
+		}
+		credentialsFile.close();
+	}
+
+	return false;
 }

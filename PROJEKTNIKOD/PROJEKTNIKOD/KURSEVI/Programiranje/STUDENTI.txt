@@ -1,2 +1,1 @@
-Student,Janko,Jankovic
 Student,Zivko,Micic

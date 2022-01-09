@@ -7,8 +7,8 @@
 
 Administrator::Administrator(std::string userName, std::string password) : User(userName, password) {
 	this->setType("Administrator");
-	auto open = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDS.TXT");
-	if (!open) {
+	//auto open = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDS.TXT");
+	if (!checkUserName()) {
 		namespace fs = std::filesystem;
 		fs::path path = std::filesystem::current_path();
 		fs::path adminSubfolderPath = path / "STUDENTI" / this->userName;
@@ -16,10 +16,13 @@ Administrator::Administrator(std::string userName, std::string password) : User(
 		create_directory(adminSubfolderPath);
 	}
 	
-	if (!checkIfUserIsAlreadyInAFile(userName, password, "Administrator")) {
+	if (!checkIfUserIsAlreadyInAFile(userName)) {
 		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
 		writeUsers << *this;
 		writeUsers.close();
+	}
+	else {
+		std::cout << "This user already exists" << std::endl;
 	}
 }
 
@@ -42,17 +45,19 @@ void Administrator::addUserToCourse() {
 		std::getline(std::cin, password, '\n');
 		std::cout << "Is it Student or Lecturer: " << std::endl;
 		std::getline(std::cin, type, '\n');
+
+		if (checkIfIsEitherStudentOrLecturer(courseName)) {
+			throw std::exception("Person already exists in this course!");
+		}
+
 		if (type == "Lecturer") {
 			//Lecturer l(userName, password);
 			Lecturer l(userName, password);
 			l.replaceLecturer(courseName);
 			l.signLecturerToCourse(courseName);
-			//POTREBNO IMPLEMENTIRATI DA SE OBRISE POSTOJECI LECTURER, I OVAJ GA ZAMIJENI
 		}
 		else if (type == "Student") {
 			Student s(userName, password);
-			//s.signToCourse(courseName);
-			//POTREBNA METODA DA SE DIREKTNO DODA STUDENT U FAJL, BEZ SLANJA ZAHTJEVA
 			s.addStudentDirectlyToCourse(courseName);
 		}
 		else {
@@ -65,7 +70,6 @@ void Administrator::addUserToCourse() {
 
 
 }
-
 
 //IZBJECI DUPLIRANJE KODA
 void Administrator::removeUserFromCourse() {
@@ -81,7 +85,7 @@ void Administrator::removeUserFromCourse() {
 			throw std::exception("Course doesn't exist!");
 		}
 		//checkCourse.close();
-		std::cout << "Enter existing user name: " << std::endl;
+		std::cout << "Enter existing user name or 'Lecturer' to remove lecturer: " << std::endl;
 		std::string userName;
 		std::getline(std::cin, userName, '\n');
 
@@ -91,7 +95,7 @@ void Administrator::removeUserFromCourse() {
 		checkLecturer >> lecturer;
 		checkLecturer.close();
 
-		if (lecturer.getUserName() == userName) {
+		if (userName == "Lecturer") {
 			auto writeOver = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt", std::ios::out);
 			writeOver.close();
 		}
@@ -153,9 +157,6 @@ void Administrator::removeCourse() {
 
 		namespace fs = std::filesystem;
 		fs::path path = std::filesystem::current_path();
-
-
-
 		fs::remove_all(path / "KURSEVI" / courseName);
 
 	}
@@ -174,4 +175,8 @@ bool Administrator::doesCourseExist(std::string courseName) {
 	}
 
 	return false;
+}
+
+void Administrator::modifyCourses() {
+	std::cout << "Which course do you want to modify: " << std::endl;
 }

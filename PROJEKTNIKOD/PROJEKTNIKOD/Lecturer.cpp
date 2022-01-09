@@ -43,17 +43,20 @@ Lecturer::Lecturer(std::string userName, std::string password) : User(userName, 
 		namespace fs = std::filesystem;
 		fs::path path = std::filesystem::current_path();
 		fs::path studentSubfolderPath = path / "STUDENTI" / this->userName;
-		fs::path chatPath = path / "STUDENTI" / this->userName / "CHATS";
 		create_directory(studentSubfolderPath);
+		fs::path chatPath = path / "STUDENTI" / this->userName / "CHATS";
 		create_directory(chatPath);
 		//auto write = std::ofstream("./STUDENTI/" + this->userName + "/" + "FRIENDS.TXT", std::ios::out | std::ios::app);
 		//write << *this;
 	}
 
-	if (!checkIfUserIsAlreadyInAFile(userName, password, "Lecturer") && userName != "") {
+	if (!checkIfUserIsAlreadyInAFile(userName) && userName != "") {
 		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
 		writeUsers << *this;
 		writeUsers.close();
+	}
+	else {
+		std::cout << "This person is already written in this file!" << std::endl;
 	}
 }
 
@@ -146,3 +149,5 @@ void Lecturer::signLecturerToCourse(std::string courseName) {
 void Lecturer::replaceLecturer(std::string courseName) const {
 	auto replaceFile = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
 }
+
+

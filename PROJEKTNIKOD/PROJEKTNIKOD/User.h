@@ -42,9 +42,11 @@ public:
 
 	void checkInbox() const;
 	void textFriend(std::string friendName) const;
-
+	bool checkIfIsLecturer(std::string courseName) const;
+	bool checkIfIsEitherStudentOrLecturer(std::string courseName) const;
+	bool checkUserName() const;
 protected:
 	void setType(std::string type);
 
-	bool checkIfUserIsAlreadyInAFile(std::string userName, std::string password, std::string type) const;
+	bool checkIfUserIsAlreadyInAFile(std::string userName) const;
 };

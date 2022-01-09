@@ -38,7 +38,7 @@ auto sign() {
 int main() {
 	//Student s("Novica", "12345");
 	//s.sendFriendRequest("Janko");
-	Student j("Janko", "Jankovic");
+	//Student j("Janko", "Jankovic");
 	//j.checkFriendRequests();
 	//j.checkInbox();
 	//j.textFriend("Novica");
@@ -47,7 +47,7 @@ int main() {
 	//Student s("Novica", "12345")
 	//Student newSt("Igor", "111");
 	//newSt.signToCourse()
-	Lecturer l("Novica", "22222");
+	//Lecturer l("Novica", "22222");
 	//Course c("Programiranje", l);
 	
 	//j.signToCourse("Programiranje");
@@ -57,13 +57,15 @@ int main() {
 	//j.signToCourse("OET");
 	//l.signStudentToCourse("OET");
 
-	Administrator a("Jovan", "21321");
+	//Administrator a("Jovan", "21321");
 
 	//a.addNewCourse();
 
 	//a.removeCourse();
 
-	a.addUserToCourse();
+	//a.addUserToCourse();
+
+	//a.removeUserFromCourse();
 
 	//l.signLecturerToCourse("Programiranje");
 	//Lecturer r("Drazen", "8432");

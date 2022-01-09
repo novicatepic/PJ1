@@ -9,3 +9,13 @@ Administrator,Jovan,21321
 Lecturer,Arsenije,Cernojevic
 Student,Zivko,Micic
 Lecturer,Majkan,Majkovic
+Lecturer,Zarko,2131
+Lecturer,Zarko,2123
+Lecturer,Zarko,21321
+Student,Janko,Markovic
+Student,Janko,asdada
+Lecturer,Janko,adsadas
+Lecturer,Zivko,asdsad
+Student,Zivko,asdad
+Student,Zivko,dadsad
+Lecturer,Zivko,adsadasd
