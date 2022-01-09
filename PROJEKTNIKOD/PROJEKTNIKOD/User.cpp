@@ -41,6 +41,25 @@ void User::checkInbox() const {
 	removeInbox.close();
 }
 
+void User::filterInbox() const {
+	std::string filter;
+	std::cout << "Enter filter string: " << std::endl;
+	std::getline(std::cin, filter);
+	auto openChat = std::ifstream("./STUDENTI/" + this->userName + "/CHATS/INBOX.txt");
+	if (openChat) {
+		std::string readString;
+
+		while (openChat.good()) {
+			std::getline(openChat, readString, '\n');
+			size_t found = readString.find(filter);
+			if (found != std::string::npos) {
+				std::cout << readString << std::endl;
+			}
+		}
+		openChat.close();
+	}
+}
+
 bool User::checkIfUserIsAlreadyInAFile(std::string userName) const {
 	auto readUsers = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
 
@@ -168,6 +187,83 @@ bool User::checkUserName() const {
 		}
 		credentialsFile.close();
 	}
+
+	return false;
+}
+
+bool User::checkUserName(std::string name) const {
+	auto credentialsFile = std::ifstream("./KORISNICI/" + this->userName + "/Korisnici.txt");
+	while (credentialsFile.good()) {
+		User u;
+		credentialsFile >> u;
+		if (u.getUserName() == name) {
+			return true;
+		}
+	}
+	credentialsFile.close();
+
+	return false;
+}
+
+std::vector<User> User::returnUsers() {
+	std::vector<User> users;
+
+	auto changeUserFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
+
+	if (changeUserFile) {
+		while (changeUserFile.good()) {
+			User u;
+			changeUserFile >> u;
+		}
+		changeUserFile.close();
+	}
+
+	return users;
+}
+
+void User::setUserName(std::string name) {
+	this->userName = name;
+}
+
+void User::setPassword(std::string password) {
+	this->password = password;
+}
+
+bool User::operator==(const User& other) const {
+	if (this->userName == other.userName)
+		return true;
+
+	return false;
+}
+
+bool User::operator!=(const User& other) const {
+	return !(*this == other);
+}
+
+/*bool User::operator>(const User& other) const {
+	if (this->userName.size() > other.userName.size())
+		return 1;
+
+	return 0;
+}*/
+
+bool User::operator<(const User& other) const {
+	if (this->userName < other.userName)
+		return true;
+
+	return false;
+}
+
+bool User::operator>=(const User& other) const {
+	if (this->userName.size() >= other.userName.size())
+		return true;
+
+	return false;
+}
+
+bool User::operator<=(const User& other) const {
+	if (this->userName.size() <= other.userName.size())
+		return true;
 
 	return false;
 }

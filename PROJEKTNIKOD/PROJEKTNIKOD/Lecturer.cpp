@@ -56,7 +56,7 @@ Lecturer::Lecturer(std::string userName, std::string password) : User(userName, 
 		writeUsers.close();
 	}
 	else {
-		std::cout << "This person is already written in this file!" << std::endl;
+		//std::cout << "This person is already written in this file!" << std::endl;
 	}
 }
 
@@ -150,4 +150,55 @@ void Lecturer::replaceLecturer(std::string courseName) const {
 	auto replaceFile = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
 }
 
+void Lecturer::writeGrade(std::string courseName) const {
+	auto openFile = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::in);
+	try {
+		if (!openFile) {
+			throw std::exception("Course doesn't exist!");
+		}
 
+		std::cout << "Enter student name: " << std::endl;
+		std::string studentName; 
+		std::getline(std::cin, studentName, '\n');
+		std::cout << "Enter grade: " << std::endl;
+		int grade;
+		std::cin >> grade;
+		if (grade < 5 && grade > 10) {
+			throw std::exception("Grade must be between 5 and 10, exiting option, sorry!");
+		}
+		//if(!checkIfIsEitherStudentOrLecturer(courseName))
+		//FUNKCIJA DA PROVJERI DA LI POSTOJI KORISNIK U FAJLU
+
+		std::vector<Student> remainingStudents;
+
+		while (openFile.good()) {
+			Student s;
+			openFile >> s;
+			if (s.getUserName() == studentName) {
+				auto writeGrade = std::ofstream("./KURSEVI/" + courseName + "/POLOZILI.txt", std::ios::out | std::ios::app);
+				writeGrade << s;
+				writeGrade << grade;
+				writeGrade.close();
+			}
+			else {
+				remainingStudents.push_back(s);
+			}
+		}
+
+		openFile.close();
+
+		auto openFile2 = std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::out);
+
+		if (openFile2) {
+			for (auto elem : remainingStudents) {
+				openFile2 << elem;
+			}
+		}
+
+		openFile2.close();
+
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+}

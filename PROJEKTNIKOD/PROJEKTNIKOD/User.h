@@ -32,21 +32,39 @@ public:
 		if (rhs.getUserName() != "" && rhs.getPassword() != "" && rhs.getType() != "") {
 			return ofs << rhs.type << ',' << rhs.userName << ',' << rhs.password << std::endl;
 		}
+		return ofs;
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const User& rhs) {
 		if (rhs.type != "" && rhs.userName != "" && rhs.password != "") {
 			return os << rhs.type << ',' << rhs.userName << std::endl;
 		}
+		return os;
 	}
 
+	bool operator==(const User& other) const;
+	bool operator!=(const User& other) const;
+	//bool operator>(const User& other) const;
+	bool operator<(const User& other) const;
+	bool operator>=(const User& other) const;
+	bool operator<=(const User& other) const;
+
 	void checkInbox() const;
+	void filterInbox() const;
 	void textFriend(std::string friendName) const;
 	bool checkIfIsLecturer(std::string courseName) const;
 	bool checkIfIsEitherStudentOrLecturer(std::string courseName) const;
 	bool checkUserName() const;
+	void setUserName(std::string name);
 protected:
 	void setType(std::string type);
 
+	std::vector<User> returnUsers();
+
+	bool checkUserName(std::string name) const;
+
 	bool checkIfUserIsAlreadyInAFile(std::string userName) const;
+
+	//void setUserName(std::string name);
+	void setPassword(std::string password);
 };

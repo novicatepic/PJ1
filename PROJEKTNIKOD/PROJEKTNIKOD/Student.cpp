@@ -29,7 +29,7 @@ Student::Student(std::string userName, std::string password) : User(userName, pa
 		writeUsers.close();
 	}
 	else {
-		std::cout << "This student already exists!" << std::endl;
+		//std::cout << "This student already exists!" << std::endl;
 	}
 }
 

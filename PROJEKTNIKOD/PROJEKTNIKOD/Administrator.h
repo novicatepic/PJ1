@@ -11,11 +11,13 @@ public:
 	void removeUserFromCourse();
 
 	void modifyCourses();
-	void modifyStudents();
+	void modifyUsers();
 
 	void addNewCourse();
 	void removeCourse();
 
 private:
 	bool doesCourseExist(std::string courseName);
+	void modifyHelper(std::string);
+
 };

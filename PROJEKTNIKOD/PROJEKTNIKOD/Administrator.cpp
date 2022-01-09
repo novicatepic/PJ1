@@ -22,7 +22,7 @@ Administrator::Administrator(std::string userName, std::string password) : User(
 		writeUsers.close();
 	}
 	else {
-		std::cout << "This user already exists" << std::endl;
+		//std::cout << "This user already exists" << std::endl;
 	}
 }
 
@@ -129,14 +129,14 @@ void Administrator::addNewCourse() {
 		if (doesCourseExist(courseName)) {
 			throw std::exception("Course already exists!");
 		}
-		std::cout << "Enter lecturer credentials: " << std::endl;
+		/*std::cout << "Enter lecturer credentials: " << std::endl;
 		std::string lecturerName, lecturerPassword;
 		std::cout << "Enter lecturer name: " << std::endl;
 		std::getline(std::cin, lecturerName, '\n');
 		std::cout << "Enter lecturer password: " << std::endl;
 		std::getline(std::cin, lecturerPassword, '\n');
-		Lecturer r(lecturerName, lecturerPassword);
-		Course c(courseName, r);
+		Lecturer r(lecturerName, lecturerPassword);*/
+		Course c(courseName);
 
 		//r.signLecturerToCourse(courseName);
 	}
@@ -179,4 +179,90 @@ bool Administrator::doesCourseExist(std::string courseName) {
 
 void Administrator::modifyCourses() {
 	std::cout << "Which course do you want to modify: " << std::endl;
+	std::string courseName;
+	std::getline(std::cin, courseName, '\n');
+
+	try {
+		if (!doesCourseExist(courseName)) {
+			throw std::exception("This course doesn't exist!");
+		}
+
+		std::cout << "Do you want to add or remove users from this course(1/2) : " << std::endl;
+		std::string choice;
+		std::getline(std::cin, choice, '\n');
+		if (choice == "1") {
+			this->addUserToCourse();
+		}
+		else if (choice == "2") {
+			this->removeUserFromCourse();
+		}
+		else {
+			throw std::exception("Unknown option, sorry!");
+		}
+
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+}
+
+void Administrator::modifyUsers() {
+	std::cout << "Enter username of the user you want to modify: " << std::endl;
+	std::string userName;
+	std::getline(std::cin, userName, '\n');
+	
+	namespace fs = std::filesystem;
+
+	fs::path path = std::filesystem::current_path();
+
+	try {
+		if (!checkUserName(userName)) {
+			throw std::exception("User already exists in this course!");
+		}
+
+		std::cout << "Do you want to change username or password: (1/2)" << std::endl;
+		std::string answer;
+		std::getline(std::cin, answer, '\n');
+		if (answer == "1") {
+			std::cout << "Enter new username for this student: " << std::endl;
+			std::string newName;
+			std::getline(std::cin, newName, '\n');
+			std::vector<User> users = returnUsers();
+			auto changeUserFile = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::out);
+
+			for (auto elem : users) {
+				if (elem.getUserName() == userName) {
+					elem.setUserName(newName);
+					changeUserFile << elem;
+				}
+				else {
+					changeUserFile << elem;
+				}
+			}
+			changeUserFile.close();
+
+			for (auto const& entry : fs::directory_iterator(path)) {
+				//std::cout << entry.path().filename() << std::endl;
+				//std::u8string path_string(entry.path().filename().u8string());
+				//Course c(path_string);
+			}
+
+		}
+		else if (answer == "2") {
+			std::cout << "Enter new password for this student: " << std::endl;
+			std::string newPass;
+			std::getline(std::cin, newPass, '\n');
+		}
+		else {
+			throw std::exception("Invalid option!");
+		}
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+}
+
+void modifyHelper(std::string helpName) {
+	
+
 }

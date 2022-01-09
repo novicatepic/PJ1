@@ -19,3 +19,4 @@ Lecturer,Zivko,asdsad
 Student,Zivko,asdad
 Student,Zivko,dadsad
 Lecturer,Zivko,adsadasd
+Student,Igor,111
