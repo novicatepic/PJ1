@@ -18,6 +18,5 @@ public:
 
 private:
 	bool doesCourseExist(std::string courseName);
-	void modifyHelper(std::string);
 
 };

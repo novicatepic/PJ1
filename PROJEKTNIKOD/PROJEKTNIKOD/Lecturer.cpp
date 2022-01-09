@@ -52,7 +52,9 @@ Lecturer::Lecturer(std::string userName, std::string password) : User(userName, 
 
 	if (!checkIfUserIsAlreadyInAFile(userName) && userName != "") {
 		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
+		this->typePassword = true;
 		writeUsers << *this;
+		this->typePassword = false;
 		writeUsers.close();
 	}
 	else {

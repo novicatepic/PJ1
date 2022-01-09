@@ -192,7 +192,7 @@ bool User::checkUserName() const {
 }
 
 bool User::checkUserName(std::string name) const {
-	auto credentialsFile = std::ifstream("./KORISNICI/" + this->userName + "/Korisnici.txt");
+	auto credentialsFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
 	while (credentialsFile.good()) {
 		User u;
 		credentialsFile >> u;
@@ -209,15 +209,18 @@ std::vector<User> User::returnUsers() {
 	std::vector<User> users;
 
 	auto changeUserFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
-
+	this->typePassword = true;
 	if (changeUserFile) {
 		while (changeUserFile.good()) {
 			User u;
 			changeUserFile >> u;
+			if (u.getUserName() != "") {
+				users.push_back(u);
+			}
 		}
 		changeUserFile.close();
 	}
-
+	this->typePassword = false;
 	return users;
 }
 
@@ -266,4 +269,8 @@ bool User::operator<=(const User& other) const {
 		return true;
 
 	return false;
+}
+
+void User::setTypePassword(bool typePassword) {
+	this->typePassword = typePassword;
 }

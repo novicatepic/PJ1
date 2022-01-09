@@ -14,11 +14,15 @@ Administrator::Administrator(std::string userName, std::string password) : User(
 		fs::path adminSubfolderPath = path / "STUDENTI" / this->userName;
 		//fs::path chatPath = path / "STUDENTI" / this->userName / "CHATS";
 		create_directory(adminSubfolderPath);
+		//std::ofstream passwordFile("./STUDENTI/" + this->userName + "/" + "FRIENDREQUESTS.TXT");
 	}
 	
 	if (!checkIfUserIsAlreadyInAFile(userName)) {
 		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
+		//auto writePassword = std::ofstream("./KORISNICI/Sifre.txt", std::ios::app | std::ios::out);
+		this->typePassword = true;
 		writeUsers << *this;
+		this->typePassword = false;
 		writeUsers.close();
 	}
 	else {
@@ -217,52 +221,49 @@ void Administrator::modifyUsers() {
 
 	try {
 		if (!checkUserName(userName)) {
-			throw std::exception("User already exists in this course!");
+			throw std::exception("User doesn't exist!");
 		}
 
-		std::cout << "Do you want to change username or password: (1/2)" << std::endl;
+		std::cout << "Change password of this user: " << std::endl;
+		std::cout << "Enter new password: " << std::endl;
 		std::string answer;
 		std::getline(std::cin, answer, '\n');
-		if (answer == "1") {
-			std::cout << "Enter new username for this student: " << std::endl;
-			std::string newName;
-			std::getline(std::cin, newName, '\n');
-			std::vector<User> users = returnUsers();
-			auto changeUserFile = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::out);
+		std::vector<User> users;
 
-			for (auto elem : users) {
-				if (elem.getUserName() == userName) {
-					elem.setUserName(newName);
-					changeUserFile << elem;
-				}
-				else {
-					changeUserFile << elem;
-				}
+
+		this->typePassword = true;
+		
+		auto openFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
+
+		while (openFile.good()) {
+			User u;
+			u.setTypePassword(true);
+			openFile >> u;
+			if (u.getUserName() == userName) {
+				u.setPassword(answer);
+				users.push_back(u);
 			}
-			changeUserFile.close();
-
-			for (auto const& entry : fs::directory_iterator(path)) {
-				//std::cout << entry.path().filename() << std::endl;
-				//std::u8string path_string(entry.path().filename().u8string());
-				//Course c(path_string);
+			else {
+				users.push_back(u);
 			}
+		}
+		openFile.close();
 
+		for (auto elem : users) {
+			auto writeNew = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::out);
+			if (writeNew) {
+				//this->typePassword = true;
+				for (auto elem : users) {
+					elem.setTypePassword(true);
+					writeNew << elem;
+				}
+
+				writeNew.close();
+			}
 		}
-		else if (answer == "2") {
-			std::cout << "Enter new password for this student: " << std::endl;
-			std::string newPass;
-			std::getline(std::cin, newPass, '\n');
-		}
-		else {
-			throw std::exception("Invalid option!");
-		}
+		this->typePassword = false;
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}
-}
-
-void modifyHelper(std::string helpName) {
-	
-
 }

@@ -9,6 +9,7 @@ protected:
 	std::string userName;
 	std::string password;
 	std::string type;
+	bool typePassword = false;
 public:
 
 	User(std::string userName = "", std::string password = "");
@@ -18,29 +19,47 @@ public:
 
 	friend std::istream& operator>>(std::ifstream& ifs, User& rhs)
 	{
-		char delim = ',';
-		std::string type;
-		std::getline(ifs, rhs.type, delim);
-		std::getline(ifs, rhs.userName, delim);
-		std::getline(ifs, rhs.password);
-		//ifs.ignore();
-		return ifs;
+		if (rhs.typePassword) {
+			char delim = ',';
+			std::string type;
+			std::getline(ifs, rhs.type, delim);
+			std::getline(ifs, rhs.userName, delim);
+			std::getline(ifs, rhs.password);
+			//ifs.ignore();
+			return ifs;
+		}
+		else {
+			char delim = ',';
+			std::string type;
+			std::getline(ifs, rhs.type, delim);
+			std::getline(ifs, rhs.userName, delim);
+			return ifs;
+		}
 	}
 
 	friend std::ostream& operator<<(std::ofstream& ofs, const User& rhs)
 	{
-		if (rhs.getUserName() != "" && rhs.getPassword() != "" && rhs.getType() != "") {
-			return ofs << rhs.type << ',' << rhs.userName << ',' << rhs.password << std::endl;
+		if (rhs.typePassword) {
+			if (rhs.getUserName() != "" && rhs.getPassword() != "" && rhs.getType() != "") {
+				return ofs << rhs.type << ',' << rhs.userName << ',' << rhs.password << std::endl;
+			}
+		}
+		else {
+			if (rhs.getUserName() != "" && rhs.getPassword() != "" && rhs.getType() != "") {
+				return ofs << rhs.type << ',' << rhs.userName << std::endl;
+			}
 		}
 		return ofs;
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const User& rhs) {
-		if (rhs.type != "" && rhs.userName != "" && rhs.password != "") {
-			return os << rhs.type << ',' << rhs.userName << std::endl;
-		}
+		return os << rhs.type << ',' << rhs.userName << std::endl;
 		return os;
 	}
+
+	
+
+
 
 	bool operator==(const User& other) const;
 	bool operator!=(const User& other) const;
@@ -56,6 +75,8 @@ public:
 	bool checkIfIsEitherStudentOrLecturer(std::string courseName) const;
 	bool checkUserName() const;
 	void setUserName(std::string name);
+	void setPassword(std::string password);
+	void setTypePassword(bool typePassword);
 protected:
 	void setType(std::string type);
 
@@ -66,5 +87,5 @@ protected:
 	bool checkIfUserIsAlreadyInAFile(std::string userName) const;
 
 	//void setUserName(std::string name);
-	void setPassword(std::string password);
+
 };

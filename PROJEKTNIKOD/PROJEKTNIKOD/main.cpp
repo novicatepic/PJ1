@@ -59,7 +59,9 @@ int main() {
 	//j.signToCourse("OET");
 	//l.signStudentToCourse("OET");
 
-	//Administrator a("Jovan", "21321");
+	Administrator a("Jovan", "21321");
+
+	a.modifyUsers();
 
 	//a.addNewCourse();
 
@@ -95,6 +97,9 @@ int main() {
 	//r.signLecturerToCourse("SPA");
 	//s.addStudentDirectlyToCourse("SPA");
 	//r.writeGrade("SPA");
+
+	//Student sprim("Cak", "Noris");
+	//sprim.addStudentDirectlyToCourse("OSI");
 
 	return 0;
 }
