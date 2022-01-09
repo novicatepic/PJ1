@@ -36,48 +36,38 @@ auto sign() {
 }
 
 int main() {
-	Student st("Marko", "Markovic");
-
-	//st.signToCourse("Programiranje");
-	//Course c("Programiranje");
-	//Lecturer l;
-	//l.signStudentToCourse("Programiranje");
-	
-	Student s2("Janko", "Jankovic");
-	//st.sendFriendRequest("Janko");
-	//s2.checkFriendRequests();
-	//st.textFriend("Janko");
-	Lecturer l("Zoren", "12345");
-	Lecturer l2("Markan", "222");
-
-	//User u = sign();
-
-	//User u;
-
-	//u = sign();
-	//Student s(u.getUserName(), u.getPassword());
+	//Student s("Novica", "12345");
+	//s.sendFriendRequest("Janko");
+	Student j("Janko", "Jankovic");
+	//j.checkFriendRequests();
+	//j.checkInbox();
+	//j.textFriend("Novica");
 	//s.checkInbox();
+	//s.textFriend("Zoran");
+	//Student s("Novica", "12345")
+	//Student newSt("Igor", "111");
+	//newSt.signToCourse()
+	Lecturer l("Novica", "22222");
+	//Course c("Programiranje", l);
+	
+	//j.signToCourse("Programiranje");
+	//l.signStudentToCourse("Programiranje");
+
+	//Course cNew("OET", l);
+	//j.signToCourse("OET");
+	//l.signStudentToCourse("OET");
+
+	Administrator a("Jovan", "21321");
+
+	//a.addNewCourse();
+
+	//a.removeCourse();
+
+	a.addUserToCourse();
 
 	//l.signLecturerToCourse("Programiranje");
-
-	//s2.checkInbox();
-
-	Course c("Matematika");
-	st.signToCourse("Matematika");
-	//l.signStudentToCourse("Matematika");
-
-	//std::cin.ignore();
-	//st.textFriend(l.getUserName());
-	//std::cin.ignore();
-
-	//l.checkInbox();
-	
-	//l.textFriend(st.getUserName());
-
-	//st.checkInbox();
-
-	Administrator a;
-	a.removeCourse();
+	//Lecturer r("Drazen", "8432");
+	//r.signLecturerToCourse("Programiranje");
 
 	return 0;
 }

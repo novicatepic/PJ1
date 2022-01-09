@@ -50,7 +50,7 @@ Lecturer::Lecturer(std::string userName, std::string password) : User(userName, 
 		//write << *this;
 	}
 
-	if (!checkIfUserIsAlreadyInAFile(userName, password) && userName != "") {
+	if (!checkIfUserIsAlreadyInAFile(userName, password, "Lecturer") && userName != "") {
 		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
 		writeUsers << *this;
 		writeUsers.close();
@@ -81,7 +81,7 @@ void Lecturer::signStudentToCourse(std::string courseName) {
 		while (readAgain.good()) {
 			Student u;
 			readAgain >> u;
-			if (u.getUserName() == userName) {
+			if (u.getUserName() == userName && u.checkIfIsAlreadyAFriend(this->getUserName())) {
 				u.automaticLecturerFriend(this->getUserName(), this->getPassword());
 				writeFile << u;
 			}
@@ -105,19 +105,44 @@ void Lecturer::signStudentToCourse(std::string courseName) {
 
 void Lecturer::signLecturerToCourse(std::string courseName) {
 	try {
-		auto writeToCourse = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt", std::ios::out | std::ios::app);
-		if (writeToCourse) {
-			if (howManyLecturers(courseName) == 0) {
-				writeToCourse << *this;
-				writeToCourse.close();
-			}
-			else {
-				throw std::exception("There is already one lecturer in this course!");
-		}
+		auto readFromCourse = std::ifstream("./KURSEVI/" + courseName + "/PREDAVAC.txt", std::ios::in);
+		if (readFromCourse) {
+			readFromCourse.close();
 
+			auto writeToCourse = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt", std::ios::out | std::ios::app);
+			if (writeToCourse) {
+				if (howManyLecturers(courseName) == 0) {
+					writeToCourse << *this;
+					writeToCourse.close();
+				}
+				else {
+					throw std::exception("There is already one lecturer in this course!");
+				}
+
+			}
+			writeToCourse.close();
+
+			auto makeFriends = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::in);
+
+
+			while (makeFriends.good()) {
+				Student s;
+				makeFriends >> s;
+				if (s.getUserName() != "") {
+					s.automaticLecturerFriend(this->userName, this->password);
+				}
+			}
+			makeFriends.close();
 		}
-	}
+		else {
+			throw std::exception("This course doesn't exist!");
+		}
+		}
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}
+}
+
+void Lecturer::replaceLecturer(std::string courseName) const {
+	auto replaceFile = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
 }

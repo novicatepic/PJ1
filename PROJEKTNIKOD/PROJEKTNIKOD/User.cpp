@@ -41,14 +41,14 @@ void User::checkInbox() const {
 	removeInbox.close();
 }
 
-bool User::checkIfUserIsAlreadyInAFile(std::string userName, std::string password) const {
+bool User::checkIfUserIsAlreadyInAFile(std::string userName, std::string password, std::string type) const {
 	auto readUsers = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
 
 	if (readUsers) {
 		while (readUsers.good()) {
 			User u;
 			readUsers >> u;
-			if (u.getUserName() == userName && u.getPassword() == password) {
+			if (u.getUserName() == userName && u.getPassword() == password && u.getType() == type) {
 				readUsers.close();
 				return true;
 			}

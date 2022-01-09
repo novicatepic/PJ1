@@ -29,7 +29,9 @@ public:
 
 	friend std::ostream& operator<<(std::ofstream& ofs, const User& rhs)
 	{
-		return ofs << rhs.type << ',' << rhs.userName << ',' << rhs.password << std::endl;
+		if (rhs.getUserName() != "" && rhs.getPassword() != "" && rhs.getType() != "") {
+			return ofs << rhs.type << ',' << rhs.userName << ',' << rhs.password << std::endl;
+		}
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const User& rhs) {
@@ -44,5 +46,5 @@ public:
 protected:
 	void setType(std::string type);
 
-	bool checkIfUserIsAlreadyInAFile(std::string userName, std::string password) const;
+	bool checkIfUserIsAlreadyInAFile(std::string userName, std::string password, std::string type) const;
 };

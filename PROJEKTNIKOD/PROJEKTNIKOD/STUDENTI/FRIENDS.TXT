@@ -1,1 +1,11 @@
 Lecturer,Zoren,12345
+Lecturer,Novica,22222
+Lecturer,Novica,22222
+Lecturer,Novica,22222
+Lecturer,Novica,22222
+Lecturer,Novica,22222
+Lecturer,Novica,22222
+Lecturer,Novica,22222
+Lecturer,Novica,22222
+Lecturer,Novica,22222
+Lecturer,Drazen,8432

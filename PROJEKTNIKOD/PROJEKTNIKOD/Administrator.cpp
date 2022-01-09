@@ -5,7 +5,23 @@
 #include <filesystem>
 #include <vector>
 
-Administrator::Administrator(std::string userName, std::string password) : User(userName, password) {}
+Administrator::Administrator(std::string userName, std::string password) : User(userName, password) {
+	this->setType("Administrator");
+	auto open = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDS.TXT");
+	if (!open) {
+		namespace fs = std::filesystem;
+		fs::path path = std::filesystem::current_path();
+		fs::path adminSubfolderPath = path / "STUDENTI" / this->userName;
+		//fs::path chatPath = path / "STUDENTI" / this->userName / "CHATS";
+		create_directory(adminSubfolderPath);
+	}
+	
+	if (!checkIfUserIsAlreadyInAFile(userName, password, "Administrator")) {
+		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
+		writeUsers << *this;
+		writeUsers.close();
+	}
+}
 
 void Administrator::addUserToCourse() {
 	std::string courseName;
@@ -24,11 +40,12 @@ void Administrator::addUserToCourse() {
 		std::getline(std::cin, userName, '\n');
 		std::cout << "Enter password: " << std::endl;
 		std::getline(std::cin, password, '\n');
-		std::cout << "Is it student or lecturer: " << std::endl;
+		std::cout << "Is it Student or Lecturer: " << std::endl;
 		std::getline(std::cin, type, '\n');
 		if (type == "Lecturer") {
 			//Lecturer l(userName, password);
 			Lecturer l(userName, password);
+			l.replaceLecturer(courseName);
 			l.signLecturerToCourse(courseName);
 			//POTREBNO IMPLEMENTIRATI DA SE OBRISE POSTOJECI LECTURER, I OVAJ GA ZAMIJENI
 		}
@@ -39,7 +56,7 @@ void Administrator::addUserToCourse() {
 			s.addStudentDirectlyToCourse(courseName);
 		}
 		else {
-			throw std::exception("Type has to be either student or lecturer!");
+			throw std::exception("Type has to be either Student or Lecturer!");
 		}
 	}
 	catch (const std::exception& e) {
@@ -108,14 +125,16 @@ void Administrator::addNewCourse() {
 		if (doesCourseExist(courseName)) {
 			throw std::exception("Course already exists!");
 		}
-
-		Course c(courseName);
-		/*std::cout << "Enter lecturer credentials: " << std::endl;
+		std::cout << "Enter lecturer credentials: " << std::endl;
 		std::string lecturerName, lecturerPassword;
+		std::cout << "Enter lecturer name: " << std::endl;
 		std::getline(std::cin, lecturerName, '\n');
+		std::cout << "Enter lecturer password: " << std::endl;
 		std::getline(std::cin, lecturerPassword, '\n');
 		Lecturer r(lecturerName, lecturerPassword);
-		r.signLecturerToCourse(courseName);*/
+		Course c(courseName, r);
+
+		//r.signLecturerToCourse(courseName);
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;

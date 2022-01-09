@@ -23,7 +23,7 @@ Student::Student(std::string userName, std::string password) : User(userName, pa
 		requestFile.close();
 	}
 
-	if (!checkIfUserIsAlreadyInAFile(userName, password)) {
+	if (!checkIfUserIsAlreadyInAFile(userName, password, "Student")) {
 		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
 		writeUsers << *this;
 		writeUsers.close();
@@ -35,6 +35,10 @@ void Student::signToCourse(std::string courseName) const noexcept(false) {
 		if (checkIfIsInsideCourse(courseName)) {
 			throw std::exception("This course doens't exist or student is already inside this course!");
 		}
+		if (checkIfRequestIsAlreadyMade(courseName, this->getUserName())) {
+			throw std::exception("You've already made a request, wait for the professor to accept it!");
+		}
+
 		auto writeToCourse = std::ofstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt", std::ios::out | std::ios::app);
 		writeToCourse << *this;
 		writeToCourse.close();
@@ -44,11 +48,31 @@ void Student::signToCourse(std::string courseName) const noexcept(false) {
 	}
 }
 
+bool Student::checkIfRequestIsAlreadyMade(std::string course, std::string name) const {
+	auto textFile = std::ifstream("./KURSEVI/" + course + "/ZAHTJEVI.txt", std::ios::in);
+
+	if (textFile) {
+		while (textFile.good()) {
+			Student s;
+			textFile >> s;
+			if (s.getUserName() == name)
+				return true;
+		}
+	}
+
+	textFile.close();
+	return false;
+}
+
 void Student::addStudentDirectlyToCourse(std::string courseName) {
 	try {
 		if (checkIfIsInsideCourse(courseName)) {
-			throw std::exception("This course doens't exist or student is already inside this course!");
+			throw std::exception("This course doesn't exist or student is already inside this course!");
 		}
+		if (checkIfIsLecturer(courseName)) {
+			throw std::exception("Can't be added as a student, already a lecturer in here!");
+		}
+
 		auto writeToCourse = std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::out | std::ios::app);
 		writeToCourse << *this;
 		writeToCourse.close();
@@ -133,7 +157,7 @@ void Student::checkFriendRequests() const {
 		//auto friendRequestFile = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDREQUESTS.TXT", std::ios::in);
 		if (friendFile) {
 			for (auto elem : users) {
-				if (elem.getUserName() == name) {
+				if (elem.getUserName() == name && elem.getUserName() != "") {
 					friendFile << elem;
 					auto friendFile2 = std::ofstream("./STUDENTI/" + name + "/" + "FRIENDS.TXT", std::ios::out | std::ios::app);
 					friendFile2 << *this;
@@ -261,3 +285,35 @@ bool Student::checkIfIsLecturer(std::string course, std::string name) const {
 	}
 }*/
 
+bool Student::checkIfIsAlreadyAFriend(std::string friendName) {
+	auto friendsFile = std::ifstream("./STUDENTI/" + this->userName + "/FRIENDS.txt");
+
+	if (friendsFile) {
+		while (friendsFile.good()) {
+			User u;
+			friendsFile >> u;
+			if (u.getUserName() == friendName) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+	friendsFile.close();
+}
+
+bool Student::checkIfIsLecturer(std::string courseName) const {
+	auto courseFile = std::ifstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
+
+	if (courseFile) {
+		Lecturer p;
+		courseFile >> p;
+		if (p.getUserName() == this->userName && p.getPassword() == this->password) {
+			return true;
+		}
+	}
+
+	courseFile.close();
+
+	return false;
+}
