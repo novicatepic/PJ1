@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include "Course.h"
 #include <filesystem>
 
 size_t howManyStudents(std::string courseName) {
@@ -169,24 +170,35 @@ void Lecturer::replaceLecturer(std::string courseName) const {
 	replaceFile.close();
 }
 
-void Lecturer::writeGrade(std::string courseName) const {
+void Lecturer::writeGrade() const {
+	std::string courseName;
+	std::cout << "Enter name of the course you want to grade student: " << std::endl;
+	std::getline(std::cin, courseName, '\n');
+
 	auto openFile = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::in);
 	try {
 		if (!openFile) {
 			throw std::exception("Course doesn't exist!");
 		}
+		if (!checkIfIsLecturer(courseName)) {
+			throw std::exception("You are not lecturer in this course!");
+		}
 
 		std::cout << "Enter student name: " << std::endl;
 		std::string studentName; 
 		std::getline(std::cin, studentName, '\n');
+
+		Student s(studentName);
+		if (!s.checkIfIsEitherStudentOrLecturer(courseName)) {
+			throw std::exception("No student with such name in this course!");
+		}
+
 		std::cout << "Enter grade: " << std::endl;
 		int grade;
 		std::cin >> grade;
 		if (grade < 5 && grade > 10) {
 			throw std::exception("Grade must be between 5 and 10, exiting option, sorry!");
 		}
-		//if(!checkIfIsEitherStudentOrLecturer(courseName))
-		//FUNKCIJA DA PROVJERI DA LI POSTOJI KORISNIK U FAJLU
 
 		std::vector<Student> remainingStudents;
 
@@ -194,9 +206,11 @@ void Lecturer::writeGrade(std::string courseName) const {
 			Student s;
 			openFile >> s;
 			if (s.getUserName() == studentName) {
-				auto writeGrade = std::ofstream("./KURSEVI/" + courseName + "/POLOZILI.txt", std::ios::out | std::ios::app);
-				writeGrade << s;
-				writeGrade << grade;
+				Course c(courseName);
+				auto writeGrade = std::ofstream("./STUDENTI/" + courseName + "/OCJENE.txt", std::ios::out | std::ios::app);
+				writeGrade << c.getTypeOfCourse() << ":" << courseName << ":" << grade << std::endl;
+				//writeGrade << s;
+				//writeGrade << grade;
 				writeGrade.close();
 			}
 			else {
@@ -210,7 +224,68 @@ void Lecturer::writeGrade(std::string courseName) const {
 
 		if (openFile2) {
 			for (auto elem : remainingStudents) {
-				openFile2 << elem;
+				if (elem.getUserName() != "") {
+					openFile2 << elem;
+				}
+			}
+		}
+
+		openFile2.close();
+
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+}
+
+void Lecturer::finishedListening() const {
+	std::string courseName;
+	std::cout << "Enter name of the course you want to grade student: " << std::endl;
+	std::getline(std::cin, courseName, '\n');
+
+	auto openFile = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::in);
+	try {
+		if (!openFile) {
+			throw std::exception("Course doesn't exist!");
+		}
+		if (!checkIfIsLecturer(courseName)) {
+			throw std::exception("You are not lecturer in this course!");
+		}
+
+		std::cout << "Enter student name: " << std::endl;
+		std::string studentName;
+		std::getline(std::cin, studentName, '\n');
+
+		Student s(studentName);
+		if (!s.checkIfIsEitherStudentOrLecturer(courseName)) {
+			throw std::exception("No student with such name in this course!");
+		}
+
+		std::vector<Student> remainingStudents;
+
+		while (openFile.good()) {
+			Student s;
+			openFile >> s;
+			if (s.getUserName() == studentName) {
+				Course c(courseName);
+				auto writeGrade = std::ofstream("./STUDENTI/" + courseName + "/ODSLUSANI.txt", std::ios::out | std::ios::app);
+				writeGrade << courseName << ":" << c.getTypeOfCourse() << std::endl;
+				writeGrade.close();
+			}
+			else {
+				remainingStudents.push_back(s);
+			}
+		}
+
+		openFile.close();
+
+		auto openFile2 = std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::out);
+
+		if (openFile2) {
+			for (auto elem : remainingStudents) {
+				if (elem.getUserName() != "") {
+					openFile2 << elem;
+				}
 			}
 		}
 

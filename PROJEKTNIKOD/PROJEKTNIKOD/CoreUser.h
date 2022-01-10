@@ -65,6 +65,7 @@ protected:
 	bool checkIfUserIsAlreadyInAFile(std::string userName) const;
 	bool checkUserName(std::string name) const;
 	bool checkIfIsLecturer(std::string courseName) const;
+	bool doesCourseExist(std::string courseName);
 private:
 
 };

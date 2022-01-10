@@ -141,3 +141,16 @@ void CoreUser::setTypePassword(bool typePassword) {
 void CoreUser::setType(std::string type) {
 	this->type = type;
 }
+
+
+bool CoreUser::doesCourseExist(std::string courseName) {
+	namespace fs = std::filesystem;
+	fs::path path = std::filesystem::current_path();
+
+	for (auto const& entry : fs::directory_iterator(path / "KURSEVI")) {
+		if (entry.path().filename() == courseName)
+			return true;
+	}
+
+	return false;
+}

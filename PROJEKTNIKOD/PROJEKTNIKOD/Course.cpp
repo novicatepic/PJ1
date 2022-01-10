@@ -5,7 +5,7 @@
 #include <set>
 #include <algorithm>
 
-Course::Course(std::string courseName) : courseName(courseName) {
+Course::Course(std::string courseName, std::string typeOfCourse, double minimumCourseGrade) : courseName(courseName), typeOfCourse(typeOfCourse), 	minimumCourseGrade(minimumCourseGrade){
 	auto openCourse = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::in);
 	if (!openCourse) {
 		namespace fs = std::filesystem;
@@ -14,16 +14,69 @@ Course::Course(std::string courseName) : courseName(courseName) {
 		create_directory(courseFolderPath);
 
 
-		auto makeFiles = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
-		makeFiles.close();
-		makeFiles = std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt");
-		makeFiles.close();
-		makeFiles = std::ofstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt");
-		makeFiles.close();
-		makeFiles = std::ofstream("./KURSEVI/" + courseName + "/POLOZILI.txt");
-		makeFiles.close();
+		std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
+		std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt");
+		std::ofstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt");
+		std::ofstream writeTypeOfCourse = std::ofstream("./KURSEVI/" + courseName + "/" + typeOfCourse + ".txt", std::ios::out | std::ios::app);
+		writeTypeOfCourse << typeOfCourse << std::endl;
+		writeTypeOfCourse << minimumCourseGrade << std::endl;
+		writeTypeOfCourse.close();
 
-		//l.signLecturerToCourse(courseName);
+		writeTypeOfCourse = std::ofstream("./KURSEVI/" + courseName + "/" + "PREDUSLOVI.txt", std::ios::out | std::ios::app);
+		std::cout << "Enter first condition -> course needed to go to this course: " << std::endl;
+		std::string courseName;
+		std::getline(std::cin, courseName, '\n');
+		if (!doesCourseExist(courseName)) {
+			std::cout << "Course doesn't exist!" << std::endl;
+			writeTypeOfCourse << std::endl;
+		}
+		else {
+			writeTypeOfCourse << courseName << std::endl;
+		}
+
+		std::cout << "Enter second condition -> type of course and number of those courses needed to finish the course: " << std::endl;
+		std::getline(std::cin, courseName, '\n');
+		size_t number;
+		std::cin >> number;
+		writeTypeOfCourse << courseName << ":" << number << std::endl;
+		
+		size_t counter = 0;
+		std::vector<std::string> courseArray;
+		std::string option;
+		do {
+			std::cout << "Enter option, -exit to exit option: " << std::endl;
+			std::getline(std::cin, option, '\n');
+
+			if (option == "-exit") {
+
+			}
+			else if (doesCourseExist(option)) {
+				Course c(option);
+				courseArray.push_back(option);
+				counter++;
+				//std::cout << c.getCourseName() << std::endl;
+			}
+			else {
+				std::cout << "Unknown option!" << std::endl;
+			}
+
+		} while (option != "-exit");
+
+		std::cout << counter << std::endl;
+		for (auto elem : courseArray)
+			writeTypeOfCourse << elem << std::endl;
+
+	
+		do {
+			std::cout << "Enter option, -exit to exit option: " << std::endl;
+			std::getline(std::cin, option, '\n');
+
+		} while (option != "-exit");
+
+		writeTypeOfCourse.close();
+
+
+
 	}
 	else {
 		User u;
@@ -38,9 +91,18 @@ Course::Course(std::string courseName) : courseName(courseName) {
 		openCourse >> us;
 		Lecturer l(us.getUserName());
 		this->lecturer = l;
+		openCourse.close();
+		openCourse = std::ifstream("./KURSEVI/" + courseName + "/" + typeOfCourse + ".txt");
+		std::string type;
+		std::getline(openCourse, type, '\n');
+		this->typeOfCourse = type;
+		double minGrade;
+		openCourse >> minGrade;
+		this->minimumCourseGrade = minGrade;
+		openCourse.close();
 		//l.signLecturerToCourse(this->courseName);
 	}
-	openCourse.close();
+	//openCourse.close();
 }
 
 Lecturer Course::returnLecturer() const {
@@ -49,6 +111,10 @@ Lecturer Course::returnLecturer() const {
 
 std::string Course::getCourseName() const {
 	return this->courseName;
+}
+
+std::string Course::getTypeOfCourse() const {
+	return this->typeOfCourse;
 }
 
 void Course::modifyStudentInCourse(std::string credential, std::string oldData, std::string newData) {
@@ -217,4 +283,8 @@ bool Course::doesCourseExist(std::string courseName) {
 	}
 
 	return false;
+}
+
+double Course::getMinimumCourseGrade() const {
+	return this->minimumCourseGrade;
 }

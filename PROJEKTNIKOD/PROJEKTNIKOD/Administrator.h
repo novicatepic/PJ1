@@ -21,6 +21,4 @@ public:
 	void removeCourse();
 
 private:
-	bool doesCourseExist(std::string courseName);
-
 };

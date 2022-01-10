@@ -167,18 +167,6 @@ void Administrator::removeCourse() {
 	}
 }
 
-bool Administrator::doesCourseExist(std::string courseName) {
-	namespace fs = std::filesystem;
-	fs::path path = std::filesystem::current_path();
-
-	for (auto const& entry : fs::directory_iterator(path / "KURSEVI")) {
-		if (entry.path().filename() == courseName)
-			return true;
-	}
-
-	return false;
-}
-
 void Administrator::modifyCourses() {
 	std::cout << "Which course do you want to modify: " << std::endl;
 	std::string courseName;

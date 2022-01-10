@@ -10,14 +10,17 @@
 class Course {
 private:
 	std::string courseName;
+	std::string typeOfCourse;
+	double minimumCourseGrade;
 	std::vector<Student> studentArray;
 	Lecturer lecturer;
 public:
-	Course(std::string courseName);
+	Course(std::string courseName = "", std::string typeOfCourse = "", double minimumCourseGrade = 0.0);
 
 	Lecturer returnLecturer() const;
-
 	std::string getCourseName() const;
+	std::string getTypeOfCourse() const;
+	double getMinimumCourseGrade() const;
 
 	void modifyStudentInCourse(std::string credential, std::string oldData, std::string newData);
 

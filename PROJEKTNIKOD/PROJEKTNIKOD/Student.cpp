@@ -6,6 +6,7 @@
 #include <string>
 #include <filesystem>
 #include "Course.h"
+#include <string>
 #include <vector>
 
 Student::Student(std::string userName, std::string password) : CoreUser(userName, password) {
@@ -20,6 +21,8 @@ Student::Student(std::string userName, std::string password) : CoreUser(userName
 		create_directory(chatPath);
 		std::ofstream studentFile("./STUDENTI/" + this->userName + "/" + "FRIENDS.TXT");
 		std::ofstream requestFile("./STUDENTI/" + this->userName + "/" + "FRIENDREQUESTS.TXT");
+		std::ofstream gradedFile("./STUDENTI/" + this->userName + "/OCJENE.txt");
+		std::ofstream listenedFile("./STUDENTI/" + this->userName + "/ODSLUSANI.txt");
 		studentFile.close();
 		requestFile.close();
 	}
@@ -118,3 +121,112 @@ void Student::automaticLecturerFriend(std::string lecturerName) const {
 	writeLecturerFriend.close();
 }
 
+bool Student::didListenCourse(std::string courseName) {
+	Course c(courseName);
+	//std::ofstream gradedFile("./STUDENTI/" + this->userName + "/OCJENE.txt");
+	//std::ofstream listenedFile("./STUDENTI/" + this->userName + "/ODSLUSANI.txt");
+	
+	auto openListened = std::ifstream("./STUDENTI/" + this->userName + "/ODSLUSANI.txt", std::ios::in);
+	try {
+		if (!openListened) {
+			throw std::exception("Something wrong with file!");
+		}
+
+		while (openListened.good()) {
+			std::string cName;
+			openListened >> cName;
+			if (cName != "" && cName == courseName) {
+				openListened.close();
+				return true;
+			}
+
+		}
+
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+
+	openListened.close();
+	return false;
+}
+
+bool Student::howManyDidHeFinish(std::string typeOfCourse, size_t number) {
+	//std::ofstream gradedFile("./STUDENTI/" + this->userName + "/OCJENE.txt");
+	//std::ofstream listenedFile("./STUDENTI/" + this->userName + "/ODSLUSANI.txt");
+
+	size_t res = 0;
+
+	auto readFinished = std::ifstream("./STUDENTI/" + this->userName + "/OCJENE.txt", std::ios::in);
+	try {
+		if (!readFinished) {
+			throw std::exception("Something wrong with file!");
+		}
+
+		std::string readString;
+		std::getline(readFinished, readString, ':');
+		//std::getline(readFinished, readString, '\n');
+		if (readString != "") {
+			Course c(readString);
+			if (c.getTypeOfCourse() == typeOfCourse) {
+				res++;
+			}
+		}
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+
+	readFinished.close();
+	if (res >= number) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Student::minimumGradeCondition() {
+	//double minGrade;
+	
+	//std::ofstream gradedFile("./STUDENTI/" + this->userName + "/OCJENE.txt");
+	//std::ofstream listenedFile("./STUDENTI/" + this->userName + "/ODSLUSANI.txt");
+	size_t studentCounter = 0, courseCounter = 0;
+	std::string userInput;
+
+	do {
+		std::cout << "Enter course to check if student finished it with certain grade, '-exit' for exiting this option: " << std::endl;
+		std::getline(std::cin, userInput, '\n');
+		if (userInput == "-exit") {
+
+		}
+		else if (!doesCourseExist(userInput)) {
+			std::cout << "This course doesn't exist!" << std::endl;
+		}
+		else {
+			courseCounter++;
+			Course c(userInput);
+			auto readGrades =  std::ifstream("./STUDENTI/" + this->userName + "/OCJENE.txt");
+			std::string helpRead, courseName;
+			while (readGrades.good()) {
+				std::getline(readGrades, helpRead, ':');
+				std::getline(readGrades, helpRead, ':');
+				courseName = helpRead;
+				std::getline(readGrades, helpRead, '\n');
+			}
+			readGrades.close();
+			double grade = std::stod(helpRead);
+			if (c.getMinimumCourseGrade() <= grade && courseName == c.getCourseName()) {
+				studentCounter++;
+			}
+		}
+	} while (userInput != "-exit");
+
+	//auto readFinished = std::ifstream("./STUDENTI/" + this->userName + "/OCJENE.txt", std::ios::in);
+
+	if (studentCounter == courseCounter) {
+		return true;
+	}
+
+	return false;
+
+}
