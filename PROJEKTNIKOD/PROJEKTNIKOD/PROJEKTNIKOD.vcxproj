@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Administrator.h" />
+    <ClInclude Include="CoreUser.h" />
     <ClInclude Include="Course.h" />
     <ClInclude Include="Lecturer.h" />
     <ClInclude Include="Student.h" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Administrator.cpp" />
+    <ClCompile Include="CoreUser.cpp" />
     <ClCompile Include="Course.cpp" />
     <ClCompile Include="Lecturer.cpp" />
     <ClCompile Include="main.cpp" />

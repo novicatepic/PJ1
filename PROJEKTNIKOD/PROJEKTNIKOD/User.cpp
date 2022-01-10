@@ -4,38 +4,7 @@
 #include <vector>
 #include <filesystem>
 
-User::User(std::string userName, std::string password) : userName(userName), password(password) {
-	auto makeUsersFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
-	//auto makeStudent
-
-	if (!makeUsersFile) {
-		namespace fs = std::filesystem;
-		fs::path path = std::filesystem::current_path();
-		fs::path userFolder = path / "KORISNICI";
-		create_directory(userFolder);
-
-		std::ofstream("./KORISNICI/Korisnici.txt", std::ios::out);
-
-		fs::path studentSubfolder = path / "STUDENTI";
-		create_directory(studentSubfolder);
-	}
-}
-
-std::string User::getUserName() const {
-	return this->userName;
-}
-
-std::string User::getPassword() const {
-	return this->password;
-}
-
-void User::setType(std::string type) {
-	this->type = type;
-}
-
-std::string User::getType() const {
-	return this->type;
-}
+User::User(std::string userName, std::string password) : CoreUser(userName, password) { }
 
 void User::checkInbox() const {
 	auto inboxFile = std::ifstream("./STUDENTI/" + this->userName + "/CHATS/" + "INBOX.txt", std::ios::in);
@@ -76,26 +45,7 @@ void User::filterInbox() const {
 	}
 }
 
-bool User::checkIfUserIsAlreadyInAFile(std::string userName) const {
-	auto readUsers = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
 
-	if (readUsers) {
-		while (readUsers.good()) {
-			User u;
-			u.setTypePassword(true);
-			readUsers >> u;
-			if (u.getUserName() == userName) {
-				u.setTypePassword(false);
-				readUsers.close();
-				return true;
-			}
-			u.setTypePassword(false);
-		}
-	}
-	
-	readUsers.close();
-	return false;
-}
 
 void User::textFriend(std::string friendName) const {
 	auto openFriends = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDS.TXT", std::ios::in);
@@ -157,73 +107,6 @@ void User::textFriend(std::string friendName) const {
 	}
 }
 
-bool User::checkIfIsLecturer(std::string courseName) const {
-	auto courseFile = std::ifstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
-
-	if (courseFile) {
-		User p;
-		courseFile >> p;
-		if (p.getUserName() == this->userName) {
-			return true;
-		}
-	}
-
-	courseFile.close();
-
-	return false;
-}
-
-bool User::checkIfIsEitherStudentOrLecturer(std::string courseName) const {
-	auto courseFile = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt");
-
-	if (courseFile) {
-		while (courseFile.good()) {
-			User u;
-			courseFile >> u;
-			if (u.getUserName() == this->userName)
-				return true;
-		}
-	}
-
-	courseFile.close();
-
-	if (checkIfIsLecturer(courseName) == true)
-		return true;
-
-	return false;
-
-}
-
-bool User::checkUserName() const {
-	auto credentialsFile = std::ifstream("./KORISNICI/" + this->userName + "/Korisnici.txt");
-	if (credentialsFile) {
-		while (credentialsFile.good()) {
-			User u;
-			credentialsFile >> u;
-			if (u.getUserName() == this->userName) {
-				return true;
-			}
-		}
-		credentialsFile.close();
-	}
-
-	return false;
-}
-
-bool User::checkUserName(std::string name) const {
-	auto credentialsFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
-	while (credentialsFile.good()) {
-		User u;
-		credentialsFile >> u;
-		if (u.getUserName() == name) {
-			return true;
-		}
-	}
-	credentialsFile.close();
-
-	return false;
-}
-
 std::vector<User> User::returnUsers() {
 	std::vector<User> users;
 
@@ -241,14 +124,6 @@ std::vector<User> User::returnUsers() {
 	}
 	this->typePassword = false;
 	return users;
-}
-
-void User::setUserName(std::string name) {
-	this->userName = name;
-}
-
-void User::setPassword(std::string password) {
-	this->password = password;
 }
 
 bool User::operator==(const User& other) const {
@@ -290,6 +165,130 @@ bool User::operator<=(const User& other) const {
 	return false;
 }
 
-void User::setTypePassword(bool typePassword) {
-	this->typePassword = typePassword;
+
+void User::sendFriendRequest(std::string userName) const {
+	try {
+		auto getFriendFile = std::ifstream("./STUDENTI/" + userName + "/" + "FRIENDREQUESTS.TXT", std::ios::in);
+		if (!getFriendFile) {
+			throw std::exception("Person to whom you want to send friend request doesn't exist!");
+		}
+		getFriendFile.close();
+		if (checkIfFriendRequestIsAlreadyMade(userName)) {
+			throw std::exception("You've already made a request, wait!");
+		}
+		auto openFriendFile = std::ofstream("./STUDENTI/" + userName + "/" + "FRIENDREQUESTS.TXT", std::ios::out | std::ios::app);
+		if (openFriendFile) {
+			openFriendFile << *this;
+		}
+		openFriendFile.close();
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+}
+
+bool User::checkIfFriendRequestIsAlreadyMade(std::string userName) const {
+	auto getFriendFile = std::ifstream("./STUDENTI/" + userName + "/" + "FRIENDREQUESTS.TXT", std::ios::in);
+	if (getFriendFile) {
+		while (getFriendFile.good()) {
+			User u;
+			getFriendFile >> u;
+			if (u.getUserName() == userName) {
+				getFriendFile.close();
+				return true;
+			}
+		}
+	}
+
+	getFriendFile.close();
+	return false;
+}
+
+void User::checkFriendRequests() const {
+	try {
+
+		auto openFriendRequests = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDREQUESTS.TXT", std::ios::in);
+		std::vector<User> users;
+		if (openFriendRequests) {
+			std::cout << "Current people want to become your friends: " << std::endl;
+			while (openFriendRequests.good()) {
+				User u;
+				openFriendRequests >> u;
+				if (std::find(users.begin(), users.end(), u) == users.end()) {
+					users.push_back(u);
+					std::cout << u;
+				}
+			}
+		}
+		openFriendRequests.close();
+
+		std::cout << "Do you want any of them to become your friends: (y/n)" << std::endl;
+		std::string choice;
+		std::getline(std::cin, choice, '\n');
+
+		if (choice == "y") {
+			std::cout << "What's the name of the student you wanna get friends with: " << std::endl;
+			std::string name;
+			//std::cin >> name;
+			std::getline(std::cin, name, '\n');
+
+			if (this->checkIfIsAlreadyAFriend(name)) {
+				throw std::exception("This person is already your friend!");
+			}
+
+			auto friendFile = std::ofstream("./STUDENTI/" + this->userName + "/FRIENDS.TXT", std::ios::out | std::ios::app);
+
+			//auto friendRequestFile = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDREQUESTS.TXT", std::ios::in);
+			if (friendFile) {
+				for (auto elem : users) {
+					if (elem.getUserName() == name && elem.getUserName() != "") {
+						friendFile << elem;
+						auto friendFile2 = std::ofstream("./STUDENTI/" + name + "/FRIENDS.TXT", std::ios::out | std::ios::app);
+						friendFile2 << *this;
+					}
+
+				}
+			}
+			friendFile.close();
+
+			auto rewriteRequests = std::ofstream("./STUDENTI/" + this->userName + "/" + "FRIENDREQUESTS.TXT", std::ios::out);
+			if (rewriteRequests) {
+				for (auto elem : users) {
+					if (elem.getUserName() != name && elem.getUserName() != "") {
+						rewriteRequests << elem;
+					}
+				}
+			}
+
+			rewriteRequests.close();
+		}
+		else if (choice == "n") {
+
+		}
+		else {
+			std::cout << "Sorry, didn't understand you!" << std::endl;
+		}
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+
+}
+
+bool User::checkIfIsAlreadyAFriend(std::string friendName) const {
+	auto friendsFile = std::ifstream("./STUDENTI/" + this->userName + "/FRIENDS.txt");
+
+	if (friendsFile) {
+		while (friendsFile.good()) {
+			User u;
+			friendsFile >> u;
+			if (u.getUserName() == friendName) {
+				return true;
+			}
+		}
+	}
+	friendsFile.close();
+
+	return false;
+
 }

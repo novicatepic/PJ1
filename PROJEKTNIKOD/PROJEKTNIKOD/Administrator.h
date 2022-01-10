@@ -1,7 +1,8 @@
 #pragma once
 #include "User.h"
+#include "CoreUser.h"
 
-class Administrator : public User {
+class Administrator : public CoreUser {
 private:
 
 public:
@@ -11,6 +12,7 @@ public:
 	void removeUserFromCourse();
 
 	void addUser();
+	void removeUser();
 
 	void modifyCourses();
 	void modifyUsers();

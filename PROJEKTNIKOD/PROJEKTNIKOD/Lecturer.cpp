@@ -26,7 +26,7 @@ size_t howManyLecturers(std::string courseName) {
 		while (readHowManyLecturers.good()) {
 			User u;
 			readHowManyLecturers >> u;
-			if (u.getUserName() != "" && u.getPassword() != "" && u.getType() == "Lecturer") {
+			if (u.getUserName() != "") {
 				counter++;
 			}
 		}
@@ -35,7 +35,7 @@ size_t howManyLecturers(std::string courseName) {
 	return counter;
 }
 
-Lecturer::Lecturer(std::string userName, std::string password) : User(userName, password) {
+Lecturer::Lecturer(std::string userName, std::string password) : CoreUser(userName, password) {
 	this->setType("Lecturer");
 
 	auto writeToStudents = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDS.TXT");
@@ -99,7 +99,7 @@ void Lecturer::signStudentToCourse(std::string courseName) {
 					writeFile << u;
 				}
 				if (!u.checkIfIsAlreadyAFriend(this->getUserName())) {
-					u.automaticLecturerFriend(this->getUserName(), this->getPassword());
+					u.automaticLecturerFriend(this->getUserName());
 				}
 			}
 		}
@@ -149,8 +149,8 @@ void Lecturer::signLecturerToCourse(std::string courseName) {
 			while (makeFriends.good()) {
 				Student s;
 				makeFriends >> s;
-				if (s.getUserName() != "") {
-					s.automaticLecturerFriend(this->userName, this->password);
+				if (s.getUserName() != "" && !checkIfIsAlreadyAFriend(s.getUserName())) {
+					s.automaticLecturerFriend(this->userName);
 				}
 			}
 			makeFriends.close();
@@ -166,6 +166,7 @@ void Lecturer::signLecturerToCourse(std::string courseName) {
 
 void Lecturer::replaceLecturer(std::string courseName) const {
 	auto replaceFile = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
+	replaceFile.close();
 }
 
 void Lecturer::writeGrade(std::string courseName) const {

@@ -3,12 +3,10 @@
 #include "User.h"
 #include "Lecturer.h"
 #include "Course.h"
+#include "CoreUser.h"
 #include "Administrator.h"
 #include <fstream>
 #include <filesystem>
-
-
-
 
 auto sign() {
 	auto readUsers = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
@@ -21,7 +19,7 @@ auto sign() {
 
 		try {
 			while (readUsers.good()) {
-				User u;
+				CoreUser u;
 				u.setTypePassword(true);
 				readUsers >> u;
 				if (u.getUserName() == userName && u.getPassword() == pass && u.getUserName() != "") {
@@ -36,7 +34,7 @@ auto sign() {
 		catch (const std::exception& e) {
 			std::cout << e.what() << std::endl;
 			readUsers.close();
-			User u;
+			CoreUser u;
 			return u;
 		}
 	}
@@ -63,14 +61,25 @@ int main() {
 	//Student newSt("Igor", "111");
 	Student makeNew("Jovan", "122");
 	Course c("OET");
-	makeNew.signToCourse("OET");
+	//makeNew.signToCourse("OET");
 	Lecturer l("Zoran", "22222");
 	//l.signLecturerToCourse("OET");
 	//l.signStudentToCourse("OET");
-	Course c("Programiranje");
-	
+	//Course c1("Programiranje");
+	//makeNew.signToCourse("OET");
 	//j.signToCourse("Programiranje");
 	//l.signStudentToCourse("Programiranje");
+	Administrator a("Mrkela", "Dorat");
+	
+	//a.addUserToCourse();
+	//Lecturer lr = c.returnLecturer();
+	//std::cout << lr.getUserName();
+	//a.removeCourse();
+	//a.addUserToCourse();
+	//a.removeUserFromCourse();
+
+	//a.addNewCourse();
+	//a.modifyUsers();
 
 	//Course cNew("OET", l);
 	//j.signToCourse("OET");

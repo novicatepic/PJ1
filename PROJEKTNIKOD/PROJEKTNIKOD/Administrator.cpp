@@ -5,18 +5,9 @@
 #include <filesystem>
 #include <vector>
 
-Administrator::Administrator(std::string userName, std::string password) : User(userName, password) {
+Administrator::Administrator(std::string userName, std::string password) : CoreUser(userName, password) {
 	this->setType("Administrator");
-	//auto open = std::ifstream("./STUDENTI/" + this->userName + "/" + "FRIENDS.TXT");
-	if (!checkUserName()) {
-		namespace fs = std::filesystem;
-		fs::path path = std::filesystem::current_path();
-		fs::path adminSubfolderPath = path / "STUDENTI" / this->userName;
-		//fs::path chatPath = path / "STUDENTI" / this->userName / "CHATS";
-		create_directory(adminSubfolderPath);
-		//std::ofstream passwordFile("./STUDENTI/" + this->userName + "/" + "FRIENDREQUESTS.TXT");
-	}
-	
+
 	if (!checkIfUserIsAlreadyInAFile(userName)) {
 		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
 		//auto writePassword = std::ofstream("./KORISNICI/Sifre.txt", std::ios::app | std::ios::out);
@@ -42,14 +33,20 @@ void Administrator::addUserToCourse() {
 		std::cout << "Enter new user name: " << std::endl;
 		std::string userName, password, type; 
 		std::getline(std::cin, userName, '\n');
+
+		if (!checkIfUserIsAlreadyInAFile(userName)) {
+			throw std::exception("Can't add a user you didn't create!");
+		}
+
 		std::cout << "Enter password: " << std::endl;
 		std::getline(std::cin, password, '\n');
 		std::cout << "Is it Student or Lecturer: " << std::endl;
 		std::getline(std::cin, type, '\n');
 
-		if (checkIfIsEitherStudentOrLecturer(courseName)) {
+
+		/*if (checkIfIsEitherStudentOrLecturer(courseName)) {
 			throw std::exception("Person already exists in this course!");
-		}
+		}*/
 
 		if (type == "Lecturer") {
 			//Lecturer l(userName, password);
@@ -89,6 +86,10 @@ void Administrator::removeUserFromCourse() {
 		std::cout << "Enter existing user name or 'Lecturer' to remove lecturer: " << std::endl;
 		std::string userName;
 		std::getline(std::cin, userName, '\n');
+
+		if (!checkIfUserIsAlreadyInAFile(userName)) {
+			throw std::exception("Can't remove user that doesn't exist!");
+		}
 
 		std::vector<Student> students;
 		Lecturer lecturer;
@@ -274,10 +275,26 @@ void Administrator::addUser() {
 			throw std::exception("Can't add user that already exists!");
 		}
 
+		std::cout << "Enter a password for new user: " << std::endl;
+		std::string password;
+		std::getline(std::cin, password, '\n');
 
+		auto writeToFile = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::out | std::ios::app);
+		if (writeToFile) {
+			User u(userName, password);
+			u.setTypePassword(true);
+			writeToFile << u;
+			u.setTypePassword(false);
+			writeToFile.close();
+		}
 
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}
+}
+
+//NA KRAJU ODRADITI OVU FUNKCIJU
+void Administrator::removeUser() {
+
 }

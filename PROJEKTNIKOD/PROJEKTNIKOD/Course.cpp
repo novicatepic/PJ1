@@ -29,16 +29,16 @@ Course::Course(std::string courseName) : courseName(courseName) {
 		User u;
 		while (openCourse.good()) {
 			openCourse >> u;
-			if (u.getType() == "Student") {
-				Student st(u.getUserName(), u.getPassword());
-				studentArray.push_back(st);
-			}
+			Student st(u.getUserName());
+			studentArray.push_back(st);
 		}
 		openCourse.close();
-		openCourse = std::ifstream("./KURSEVI/" + courseName + "PREDAVAC.txt", std::ios::in);
-		openCourse >> u;
-		Lecturer l(u.getUserName(), u.getPassword());
-		l.signLecturerToCourse(this->courseName);
+		openCourse = std::ifstream("./KURSEVI/" + courseName + "/PREDAVAC.txt", std::ios::in);
+		User us;
+		openCourse >> us;
+		Lecturer l(us.getUserName());
+		this->lecturer = l;
+		//l.signLecturerToCourse(this->courseName);
 	}
 	openCourse.close();
 }
