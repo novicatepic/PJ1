@@ -14,7 +14,6 @@ public:
 	void signStudentToCourse(std::string courseName);
 	void signLecturerToCourse(std::string courseName);
 	void replaceLecturer(std::string courseName) const;
-
 	void writeGrade(std::string courseName) const;
 
 public:

@@ -1,8 +1,1 @@
-,,
-,,
-,,
-,,
-Student,Janko,Jankovic
-,,
-,,
-,,
+Janko

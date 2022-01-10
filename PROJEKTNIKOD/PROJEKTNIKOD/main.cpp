@@ -7,6 +7,9 @@
 #include <fstream>
 #include <filesystem>
 
+
+
+
 auto sign() {
 	auto readUsers = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
 	if (readUsers) {
@@ -19,11 +22,14 @@ auto sign() {
 		try {
 			while (readUsers.good()) {
 				User u;
+				u.setTypePassword(true);
 				readUsers >> u;
 				if (u.getUserName() == userName && u.getPassword() == pass && u.getUserName() != "") {
 					readUsers.close();
+					u.setTypePassword(false);
 					return u;
 				}
+				u.setTypePassword(false);
 			}
 			throw std::exception("Your account doesn't exist, sorry");
 		}
@@ -37,20 +43,31 @@ auto sign() {
 }
 
 int main() {
+
+
+
 	Student s("Novica", "12345");
 	//s.sendFriendRequest("Janko");
 	Student j("Janko", "Jankovic");
+	//Student r("Janko", "sadas");
+	//s.sendFriendRequest("Janko");
+	//s.textFriend("Janko");
+	//j.checkInbox();
+	//j.checkFriendRequests();
 	//j.checkFriendRequests();
 	//j.checkInbox();
 	//j.textFriend("Novica");
 	//s.checkInbox();
 	//s.textFriend("Zoran");
 	//Student s("Novica", "12345")
-	Student newSt("Igor", "111");
+	//Student newSt("Igor", "111");
 	Student makeNew("Jovan", "122");
-	//newSt.signToCourse()
-	//Lecturer l("Novica", "22222");
-	//Course c("Programiranje", l);
+	Course c("OET");
+	makeNew.signToCourse("OET");
+	Lecturer l("Zoran", "22222");
+	//l.signLecturerToCourse("OET");
+	//l.signStudentToCourse("OET");
+	Course c("Programiranje");
 	
 	//j.signToCourse("Programiranje");
 	//l.signStudentToCourse("Programiranje");
@@ -59,9 +76,9 @@ int main() {
 	//j.signToCourse("OET");
 	//l.signStudentToCourse("OET");
 
-	Administrator a("Jovan", "21321");
+	//Administrator a("Jovan", "21321");
 
-	a.modifyUsers();
+	//a.modifyUsers();
 
 	//a.addNewCourse();
 
@@ -72,7 +89,7 @@ int main() {
 	//a.removeUserFromCourse();
 
 	//l.signLecturerToCourse("Programiranje");
-	Lecturer r("Drazen", "8432");
+	//Lecturer r("Drazen", "8432");
 	//r.signLecturerToCourse("Programiranje");
 	/*namespace fs = std::filesystem;
 	fs::path path = std::filesystem::current_path() / "KURSEVI";
@@ -80,8 +97,8 @@ int main() {
 		std::cout << entry.path().filename() << std::endl;
 	}*/
 
-	Course kurs("SPA");
-	newSt.addStudentDirectlyToCourse("SPA");
+	//Course kurs("SPA");
+	//newSt.addStudentDirectlyToCourse("SPA");
 	//Course kurs2("OSI");
 	//r.signLecturerToCourse("OSI");
 	//s.addStudentDirectlyToCourse("OSI");
@@ -100,6 +117,8 @@ int main() {
 
 	//Student sprim("Cak", "Noris");
 	//sprim.addStudentDirectlyToCourse("OSI");
+
+
 
 	return 0;
 }

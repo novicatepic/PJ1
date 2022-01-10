@@ -16,58 +16,12 @@ public:
 	std::string getUserName() const;
 	std::string getPassword() const;
 	std::string getType() const;
-
-	friend std::istream& operator>>(std::ifstream& ifs, User& rhs)
-	{
-		if (rhs.typePassword) {
-			char delim = ',';
-			std::string type;
-			std::getline(ifs, rhs.type, delim);
-			std::getline(ifs, rhs.userName, delim);
-			std::getline(ifs, rhs.password);
-			//ifs.ignore();
-			return ifs;
-		}
-		else {
-			char delim = ',';
-			std::string type;
-			std::getline(ifs, rhs.type, delim);
-			std::getline(ifs, rhs.userName, delim);
-			return ifs;
-		}
-	}
-
-	friend std::ostream& operator<<(std::ofstream& ofs, const User& rhs)
-	{
-		if (rhs.typePassword) {
-			if (rhs.getUserName() != "" && rhs.getPassword() != "" && rhs.getType() != "") {
-				return ofs << rhs.type << ',' << rhs.userName << ',' << rhs.password << std::endl;
-			}
-		}
-		else {
-			if (rhs.getUserName() != "" && rhs.getPassword() != "" && rhs.getType() != "") {
-				return ofs << rhs.type << ',' << rhs.userName << std::endl;
-			}
-		}
-		return ofs;
-	}
-
-	friend std::ostream& operator<<(std::ostream& os, const User& rhs) {
-		return os << rhs.type << ',' << rhs.userName << std::endl;
-		return os;
-	}
-
-	
-
-
-
 	bool operator==(const User& other) const;
 	bool operator!=(const User& other) const;
 	//bool operator>(const User& other) const;
 	bool operator<(const User& other) const;
 	bool operator>=(const User& other) const;
 	bool operator<=(const User& other) const;
-
 	void checkInbox() const;
 	void filterInbox() const;
 	void textFriend(std::string friendName) const;
@@ -77,6 +31,47 @@ public:
 	void setUserName(std::string name);
 	void setPassword(std::string password);
 	void setTypePassword(bool typePassword);
+
+
+
+	friend std::istream& operator>>(std::ifstream& ifs, User& rhs)
+	{
+		if (rhs.typePassword) {
+			char delim = ',';
+			//std::getline(ifs, rhs.type, delim);
+			std::getline(ifs, rhs.userName, delim);
+			std::getline(ifs, rhs.password, '\n');
+			//ifs.ignore();
+			return ifs;
+		}
+		else {
+			char delim = ',';
+			//std::getline(ifs, rhs.type, delim);
+			std::getline(ifs, rhs.userName, '\n');
+			return ifs;
+		}
+	}
+
+	friend std::ostream& operator<<(std::ofstream& ofs, const User& rhs)
+	{
+		if (rhs.typePassword) {
+			if (rhs.getUserName() != "" && rhs.getPassword() != "") {
+				return ofs << rhs.userName << ',' << rhs.password << std::endl;
+			}
+		}
+		else {
+			if (rhs.getUserName() != "") {
+				return ofs << rhs.userName << std::endl;
+			}
+		}
+		return ofs;
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const User& rhs) {
+		return os << rhs.userName << std::endl;
+		return os;
+	}
+
 protected:
 	void setType(std::string type);
 

@@ -15,11 +15,9 @@ public:
 	void sendFriendRequest(std::string userName) const;
 	void checkFriendRequests() const;
 
-	//void textFriend(std::string friendName) const;
-
 	void addStudentDirectlyToCourse(std::string courseName);
 
-	void automaticLecturerFriend(std::string s1, std::string s2) const;
+	void automaticLecturerFriend(std::string, std::string) const;
 
 	bool checkIfIsAlreadyAFriend(std::string friendName) const;
 protected:
@@ -29,5 +27,5 @@ private:
 
 	//bool checkIfIsLecturer(std::string course, std::string name) const;
 	bool checkIfRequestIsAlreadyMade(std::string course, std::string name) const;
-
+	bool checkIfFriendRequestIsAlreadyMade(std::string name) const;
 };

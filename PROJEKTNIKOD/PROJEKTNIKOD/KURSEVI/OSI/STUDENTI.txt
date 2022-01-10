@@ -1,3 +1,0 @@
-Student,Novica,12345
-Student,Igor,111
-Student,Cak

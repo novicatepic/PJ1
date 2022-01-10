@@ -1,5 +1,4 @@
-Student,Novica,12345
-Student,Janko,Jankovic
-Student,Igor,2341
-Student,Jovan,122
-Lecturer,Drazen,6969
+Novica,12345
+Janko,Jankovic
+Jovan,122
+Zoran,22222

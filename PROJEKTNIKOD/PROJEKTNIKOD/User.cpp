@@ -2,8 +2,24 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <filesystem>
 
-User::User(std::string userName, std::string password) : userName(userName), password(password) { }
+User::User(std::string userName, std::string password) : userName(userName), password(password) {
+	auto makeUsersFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
+	//auto makeStudent
+
+	if (!makeUsersFile) {
+		namespace fs = std::filesystem;
+		fs::path path = std::filesystem::current_path();
+		fs::path userFolder = path / "KORISNICI";
+		create_directory(userFolder);
+
+		std::ofstream("./KORISNICI/Korisnici.txt", std::ios::out);
+
+		fs::path studentSubfolder = path / "STUDENTI";
+		create_directory(studentSubfolder);
+	}
+}
 
 std::string User::getUserName() const {
 	return this->userName;
@@ -66,11 +82,14 @@ bool User::checkIfUserIsAlreadyInAFile(std::string userName) const {
 	if (readUsers) {
 		while (readUsers.good()) {
 			User u;
+			u.setTypePassword(true);
 			readUsers >> u;
 			if (u.getUserName() == userName) {
+				u.setTypePassword(false);
 				readUsers.close();
 				return true;
 			}
+			u.setTypePassword(false);
 		}
 	}
 	
@@ -84,7 +103,7 @@ void User::textFriend(std::string friendName) const {
 	while (openFriends.good()) {
 		User st;
 		openFriends >> st;
-		if (st.getUserName() != "" && st.getPassword() != "") {
+		if (st.getUserName() != "") {
 			friends.push_back(st);
 		}
 	}

@@ -1,2 +1,0 @@
-Student,Novica,12345
-10

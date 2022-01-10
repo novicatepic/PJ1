@@ -1,10 +1,1 @@
-Student,Marko,Markovic
-Student,Novica,12345
-
-Lecturer,Novica,22222
-Lecturer,Drazen,8432
-Lecturer,Majkan,Majkovic
-Lecturer,Majkan,Majkovic
-Lecturer,Zarko,2131
-Lecturer,Zarko,2123
-Student,Zivko,Micic
+Novica

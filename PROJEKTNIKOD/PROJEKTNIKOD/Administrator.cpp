@@ -25,9 +25,6 @@ Administrator::Administrator(std::string userName, std::string password) : User(
 		this->typePassword = false;
 		writeUsers.close();
 	}
-	else {
-		//std::cout << "This user already exists" << std::endl;
-	}
 }
 
 void Administrator::addUserToCourse() {
@@ -262,6 +259,23 @@ void Administrator::modifyUsers() {
 			}
 		}
 		this->typePassword = false;
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+}
+
+void Administrator::addUser() {
+	std::string userName;
+	std::cout << "Enter user name for new user: " << std::endl;
+	std::getline(std::cin, userName, '\n');
+	try {
+		if (checkIfUserIsAlreadyInAFile(userName)) {
+			throw std::exception("Can't add user that already exists!");
+		}
+
+
+
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
