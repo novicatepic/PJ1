@@ -19,6 +19,11 @@ public:
 
 	void addNewCourse();
 	void removeCourse();
-
+	void showAllUsers() const;
 private:
+	void rewriteUsersFile(std::string userName);
+	void rewriteCoursesFilesOrFriends(std::string userName, std::string folderName);
+	void removeUserFolder(std::string userName);
+	//void rewriteOtherFriends(std::string userName);
+	
 };

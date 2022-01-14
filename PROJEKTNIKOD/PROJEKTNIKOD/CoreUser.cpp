@@ -3,20 +3,24 @@
 #include <fstream>
 #include <filesystem>
 
+namespace fs = std::filesystem;
+
 CoreUser::CoreUser(std::string userName, std::string password) : userName(userName), password(password) {
 	auto makeUsersFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
 	//auto makeStudent
 
 	if (!makeUsersFile) {
-		namespace fs = std::filesystem;
+
 		fs::path path = std::filesystem::current_path();
 		fs::path userFolder = path / "KORISNICI";
 		create_directory(userFolder);
-
 		std::ofstream("./KORISNICI/Korisnici.txt", std::ios::out);
 
 		fs::path studentSubfolder = path / "STUDENTI";
 		create_directory(studentSubfolder);
+
+		fs::path coursesSubFolder = path / "KURSEVI";
+		create_directory(coursesSubFolder);
 	}
 }
 
@@ -35,23 +39,53 @@ bool CoreUser::checkIfUserIsAlreadyInAFile(std::string userName) const {
 			}
 			u.setTypePassword(false);
 		}
+		readUsers.close();
 	}
 
-	readUsers.close();
+	//auto readUsers = std::ifstream("./KORISNICI/Admin.txt", std::ios::in);
+	auto credentialsFile = std::ifstream("./KORISNICI/Admin.txt", std::ios::in);
+	if (credentialsFile) {
+		CoreUser u;
+		u.setTypePassword(true);
+		credentialsFile >> u;
+		if (u.getUserName() == userName) {
+			u.setTypePassword(false);
+			return true;
+		}
+		u.setTypePassword(false);
+		credentialsFile.close();
+	}
+
 	return false;
 }
 
 
 bool CoreUser::checkUserName() const {
-	auto credentialsFile = std::ifstream("./KORISNICI/" + this->userName + "/Korisnici.txt");
+	auto credentialsFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
 	if (credentialsFile) {
 		while (credentialsFile.good()) {
 			CoreUser u;
+			u.setTypePassword(true);
 			credentialsFile >> u;
 			if (u.getUserName() == this->userName) {
+				u.setTypePassword(false);
 				return true;
 			}
+			u.setTypePassword(false);
 		}
+		credentialsFile.close();
+	}
+
+	credentialsFile = std::ifstream("./KORISNICI/Admin.txt", std::ios::in);
+	if (credentialsFile) {
+		CoreUser u;
+		u.setTypePassword(true);
+		credentialsFile >> u;
+		if (u.getUserName() == this->userName) {
+			u.setTypePassword(false);
+			return true;
+		}
+		u.setTypePassword(false);
 		credentialsFile.close();
 	}
 
@@ -71,6 +105,19 @@ bool CoreUser::checkUserName(std::string name) const {
 		u.setTypePassword(false);
 	}
 	credentialsFile.close();
+
+	credentialsFile = std::ifstream("./KORISNICI/Admin.txt", std::ios::in);
+	if (credentialsFile) {
+		CoreUser u;
+		u.setTypePassword(true);
+		credentialsFile >> u;
+		if (u.getUserName() == name) {
+			u.setTypePassword(false);
+			return true;
+		}
+		u.setTypePassword(false);
+		credentialsFile.close();
+	}
 
 	return false;
 }
@@ -153,4 +200,88 @@ bool CoreUser::doesCourseExist(std::string courseName) {
 	}
 
 	return false;
+}
+
+void CoreUser::showCourses() const {
+	fs::path path = std::filesystem::current_path();
+
+	for (auto const& entry : fs::directory_iterator(path / "KURSEVI")) {
+		std::string subFolderName = entry.path().filename().string();
+
+		if (subFolderName != "FRIENDREQUESTS.TXT" && subFolderName != "FRIENDS.TXT") {
+			for (auto const& entryIN : fs::directory_iterator(path / "KURSEVI" / subFolderName)) {
+				std::string fileName = entryIN.path().filename().string();
+				auto readCourseFile = std::ifstream("./KURSEVI/" + subFolderName + "/" + fileName, std::ios::in);
+				if (readCourseFile) {
+					while (readCourseFile.peek() != EOF) {
+						CoreUser u;
+						readCourseFile >> u;
+						if (u.getUserName() == this->userName) {
+							if (fileName == "PREDAVAC.txt") {
+								std::cout << "You are a lecturer in course " + subFolderName << std::endl;
+							}
+							else if (fileName == "STUDENTI.txt") {
+								std::cout << "You are a student in course " + subFolderName << std::endl;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void CoreUser::showFriends() const {
+	auto readFriends = std::ifstream("./STUDENTI/" + this->userName + "/FRIENDS.txt", std::ios::in);
+	if (readFriends) {
+		while (readFriends.good()) {
+			CoreUser u;
+			readFriends >> u;
+			if (u.getUserName() != "") {
+				std::cout << u.getUserName() << std::endl;
+			}
+		}
+		readFriends.close();
+	}
+}
+
+bool CoreUser::checkIfIsAdmin(std::string name) const {
+	auto readAdmin = std::ifstream("./KORISNICI/Admin.txt", std::ios::in);
+	if (readAdmin) {
+		CoreUser u;
+		u.setTypePassword(true);
+		readAdmin >> u;
+
+		if (u.getUserName() == name) {
+			u.setTypePassword(false);
+			return true;
+		}
+		u.setTypePassword(false);
+		readAdmin.close();
+	}
+
+	return false;
+}
+
+void CoreUser::showAllUsers() const {
+	auto showUsersFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
+	if (showUsersFile) {
+		while (showUsersFile.peek() != EOF) {
+			CoreUser core;
+			core.setTypePassword(true);
+			showUsersFile >> core;
+			if (core.getUserName() != this->userName) {
+				std::cout << core.getUserName() << std::endl;
+			}
+			core.setTypePassword(false);
+		}
+		showUsersFile.close();
+	}
+}
+
+void CoreUser::listCourses() const {
+	fs::path path = std::filesystem::current_path();
+
+	for (auto const& entry : fs::directory_iterator(path / "KURSEVI")) 
+		std::cout << entry.path().filename() << std::endl;
 }

@@ -16,7 +16,7 @@ public:
 	void replaceLecturer(std::string courseName) const;
 	void writeGrade() const;
 	void finishedListening() const;
-
+	void showStudentInCourse(std::string courseName) const;
 public:
 	friend size_t howManyStudents(std::string courseName);
 	friend size_t howManyLecturers(std::string courseName);

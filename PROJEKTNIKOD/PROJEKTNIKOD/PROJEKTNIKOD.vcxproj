@@ -143,6 +143,8 @@
     <ClInclude Include="Administrator.h" />
     <ClInclude Include="CoreUser.h" />
     <ClInclude Include="Course.h" />
+    <ClInclude Include="HelpFileForAdministrator.h" />
+    <ClInclude Include="HelpForStudent.h" />
     <ClInclude Include="Lecturer.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="User.h" />

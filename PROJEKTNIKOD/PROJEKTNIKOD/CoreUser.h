@@ -19,8 +19,13 @@ public:
 	void setPassword(std::string password);
 	void setTypePassword(bool typePassword);
 	void setType(std::string type);
-
 	bool checkIfIsEitherStudentOrLecturer(std::string courseName) const;
+	void showCourses() const;
+	void showFriends() const;
+	void showAllUsers() const;
+	void listCourses() const;
+	bool checkIfIsLecturer(std::string courseName) const;
+	bool doesCourseExist(std::string courseName);
 
 	friend std::istream& operator>>(std::ifstream& ifs, CoreUser& rhs)
 	{
@@ -56,16 +61,24 @@ public:
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const CoreUser& rhs) {
-		return os << rhs.userName << std::endl;
+		if (rhs.typePassword) {
+			 os << rhs.userName << ', ' << rhs.password << std::endl;
+		}
+		else {
+			os << rhs.userName << std::endl;
+		}
 		return os;
+
 	}
+
+	bool checkIfIsAdmin(std::string name) const;
 
 protected:
 	bool checkUserName() const;
 	bool checkIfUserIsAlreadyInAFile(std::string userName) const;
 	bool checkUserName(std::string name) const;
-	bool checkIfIsLecturer(std::string courseName) const;
-	bool doesCourseExist(std::string courseName);
+
+
 private:
 
 };

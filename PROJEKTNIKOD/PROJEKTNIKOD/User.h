@@ -24,9 +24,10 @@ public:
 	bool checkIfIsAlreadyAFriend(std::string friendName) const;
 	void sendFriendRequest(std::string userName) const;
 	void checkFriendRequests() const;
-	bool checkIfFriendRequestIsAlreadyMade(std::string name) const;
+
 
 
 protected:
+	bool checkIfFriendRequestIsAlreadyMade(std::string name) const;
 	std::vector<User> returnUsers();
 };

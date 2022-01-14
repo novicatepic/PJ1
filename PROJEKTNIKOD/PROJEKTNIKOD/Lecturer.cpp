@@ -207,7 +207,10 @@ void Lecturer::writeGrade() const {
 			openFile >> s;
 			if (s.getUserName() == studentName) {
 				Course c(courseName);
-				auto writeGrade = std::ofstream("./STUDENTI/" + courseName + "/OCJENE.txt", std::ios::out | std::ios::app);
+				auto writeToCourseFile = std::ofstream("./KURSEVI/" + courseName + "/POLOZILI.txt", std::ios::out | std::ios::app);
+				writeToCourseFile << s;
+				writeToCourseFile.close();
+				auto writeGrade = std::ofstream("./STUDENTI/" + studentName + "/OCJENE.txt", std::ios::out | std::ios::app);
 				writeGrade << c.getTypeOfCourse() << ":" << courseName << ":" << grade << std::endl;
 				//writeGrade << s;
 				//writeGrade << grade;
@@ -290,6 +293,29 @@ void Lecturer::finishedListening() const {
 		}
 
 		openFile2.close();
+
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+}
+
+void Lecturer::showStudentInCourse(std::string courseName) const {
+	auto openStudentCourseFile = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::in);
+	try {
+		if (!openStudentCourseFile) {
+			throw std::exception("Course doesn't exist!");
+		}
+
+		while (openStudentCourseFile.good()) {
+			Student s;
+			openStudentCourseFile >> s;
+			if (s.getUserName() != "") {
+				std::cout << s;
+			}
+		}
+
+		openStudentCourseFile.close();
 
 	}
 	catch (const std::exception& e) {

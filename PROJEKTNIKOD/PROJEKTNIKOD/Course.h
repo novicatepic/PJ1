@@ -22,7 +22,7 @@ public:
 	std::string getTypeOfCourse() const;
 	double getMinimumCourseGrade() const;
 
-	void modifyStudentInCourse(std::string credential, std::string oldData, std::string newData);
+	//void modifyStudentInCourse(std::string credential, std::string oldData, std::string newData);
 
 	std::set<Student> findUnionIntersectionDifference();
 

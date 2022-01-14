@@ -5,19 +5,20 @@
 #include <set>
 #include <algorithm>
 
+namespace fs = std::filesystem;
+
+
 Course::Course(std::string courseName, std::string typeOfCourse, double minimumCourseGrade) : courseName(courseName), typeOfCourse(typeOfCourse), 	minimumCourseGrade(minimumCourseGrade){
 	auto openCourse = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::in);
 	if (!openCourse) {
-		namespace fs = std::filesystem;
 		fs::path path = std::filesystem::current_path();
 		fs::path courseFolderPath = path / "KURSEVI" / this->courseName;
 		create_directory(courseFolderPath);
-
-
 		std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
 		std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt");
 		std::ofstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt");
-		std::ofstream writeTypeOfCourse = std::ofstream("./KURSEVI/" + courseName + "/" + typeOfCourse + ".txt", std::ios::out | std::ios::app);
+
+		/*std::ofstream writeTypeOfCourse = std::ofstream("./KURSEVI/" + courseName + "/" + typeOfCourse + ".txt", std::ios::out | std::ios::app);
 		writeTypeOfCourse << typeOfCourse << std::endl;
 		writeTypeOfCourse << minimumCourseGrade << std::endl;
 		writeTypeOfCourse.close();
@@ -73,7 +74,7 @@ Course::Course(std::string courseName, std::string typeOfCourse, double minimumC
 
 		} while (option != "-exit");
 
-		writeTypeOfCourse.close();
+		writeTypeOfCourse.close();*/
 
 
 
@@ -117,66 +118,6 @@ std::string Course::getTypeOfCourse() const {
 	return this->typeOfCourse;
 }
 
-void Course::modifyStudentInCourse(std::string credential, std::string oldData, std::string newData) {
-	namespace fs = std::filesystem;
-
-	fs::path path  = std::filesystem::current_path() / "KURSEVI";
-	for (auto const& entry : fs::directory_iterator(path / this->courseName)) {
-		auto enter = std::ifstream(entry.path().filename(), std::ios::in);
-		if (entry.path().filename() != "ZAHTJEVI.txt") {
-			if (enter) {
-				while (enter.good()) {
-					User u;
-					enter >> u;
-					if (u.getUserName() == lecturer.getUserName() && u.getUserName() == oldData) {
-						lecturer.setUserName(newData);
-						enter.close();
-						auto writeToFile = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
-						writeToFile << lecturer;
-						writeToFile.close();
-					}
-					else {
-						for (auto elem : studentArray) {
-							enter >> u;
-							if (u.getUserName() == elem.getUserName()) {
-								elem.setUserName(newData);
-							}
-						}
-						enter.close();
-						auto writeToFile = std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt");
-						for (auto elem : studentArray) {
-							writeToFile << elem;
-						}
-						writeToFile.close();
-					}
-				}
-			}
-		}
-		else {
-
-			std::vector<User> arrayUsers;
-			User user;
-			if (enter) {
-				while (enter.good()) {
-					enter >> user;
-					if (user.getUserName() == oldData) {
-						user.setUserName(newData);
-					}
-					arrayUsers.push_back(user);
-				}
-				enter.close();
-
-				auto writeToFile = std::ofstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt");
-
-				for (auto elem : arrayUsers) {
-					writeToFile << elem;
-				}
-				writeToFile.close();
-			}
-		}
-	}
-}
-
 std::set<Student> Course::findUnionIntersectionDifference() {
 	std::string courseName = userInput();
 	std::set<Student> resVector;
@@ -200,6 +141,12 @@ std::set<Student> Course::findUnionIntersectionDifference() {
 		else if (choice == "2") {
 			readFromCourse = std::ifstream("./KURSEVI/" + this->courseName + "/POLOZILI.txt", std::ios::in);
 			readFromCourse2 = std::ifstream("./KURSEVI/" + courseName + "/POLOZILI.txt", std::ios::in);
+			if (!readFromCourse ) {
+				auto makeNew = std::ofstream("./KURSEVI/" + this->courseName + "/POLOZILI.txt");
+			}
+			if (!readFromCourse2) {
+				auto makeNew2 = std::fstream("./KURSEVI/" + courseName + "/POLOZILI.txt");
+			}
 		}
 		else {
 			throw std::exception("It must be either 1 for current students or 2 for students that finished this course!");
@@ -228,8 +175,8 @@ std::set<Student> Course::findUnionIntersectionDifference() {
 		std::string userInput = userInput2();
 
 		if (userInput == "Union") {
-			std::set_union(set1.cbegin(), set1.cend(),
-				set2.cbegin(), set2.cend(),
+			std::set_union(set2.cbegin(), set2.cend(),
+				set1.cbegin(), set1.cend(),
 				std::inserter(resVector, resVector.begin()));
 		}
 		else if (userInput == "Intersection") {

@@ -86,9 +86,9 @@ void Student::addStudentDirectlyToCourse(std::string courseName) {
 		if (checkIfIsLecturer(courseName)) {
 			throw std::exception("Can't be added as a student, already a lecturer in here!");
 		}
-		if (checkUserName()) {
+		/*if (checkUserName()) {
 			throw std::exception("This user name already exists, cannot be added!");
-		}
+		}*/
 
 		auto writeToCourse = std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::out | std::ios::app);
 

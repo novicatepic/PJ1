@@ -14,9 +14,6 @@ public:
 	Student(std::string userName = "", std::string password = "");
 
 	void signToCourse(std::string courseName) const noexcept(false);
-
-
-
 	void addStudentDirectlyToCourse(std::string courseName);
 	void automaticLecturerFriend(std::string) const;
 

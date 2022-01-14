@@ -5,16 +5,24 @@
 #include <filesystem>
 #include <vector>
 
+namespace fs = std::filesystem;
+fs::path path = std::filesystem::current_path();
+
 Administrator::Administrator(std::string userName, std::string password) : CoreUser(userName, password) {
 	this->setType("Administrator");
 
 	if (!checkIfUserIsAlreadyInAFile(userName)) {
-		auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
+		auto writeAdministrator = std::ofstream("./KORISNICI/Admin.txt", std::ios::out);
+		this->setTypePassword(true);
+		writeAdministrator << *this;
+		writeAdministrator.close();
+		this->setTypePassword(false);
+		//auto writeUsers = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::app | std::ios::out);
 		//auto writePassword = std::ofstream("./KORISNICI/Sifre.txt", std::ios::app | std::ios::out);
-		this->typePassword = true;
-		writeUsers << *this;
-		this->typePassword = false;
-		writeUsers.close();
+		//this->typePassword = true;
+		//writeUsers << *this;
+		//this->typePassword = false;
+		//writeUsers.close();
 	}
 }
 
@@ -38,15 +46,15 @@ void Administrator::addUserToCourse() {
 			throw std::exception("Can't add a user you didn't create!");
 		}
 
-		std::cout << "Enter password: " << std::endl;
-		std::getline(std::cin, password, '\n');
+		//std::cout << "Enter password: " << std::endl;
+		//std::getline(std::cin, password, '\n');
 		std::cout << "Is it Student or Lecturer: " << std::endl;
 		std::getline(std::cin, type, '\n');
+		Student s(userName);
 
-
-		/*if (checkIfIsEitherStudentOrLecturer(courseName)) {
+		if (s.checkIfIsEitherStudentOrLecturer(courseName)) {
 			throw std::exception("Person already exists in this course!");
-		}*/
+		}
 
 		if (type == "Lecturer") {
 			//Lecturer l(userName, password);
@@ -157,8 +165,7 @@ void Administrator::removeCourse() {
 			throw std::exception("No course exists, cannot be removed!");
 		}
 
-		namespace fs = std::filesystem;
-		fs::path path = std::filesystem::current_path();
+
 		fs::remove_all(path / "KURSEVI" / courseName);
 
 	}
@@ -177,7 +184,7 @@ void Administrator::modifyCourses() {
 			throw std::exception("This course doesn't exist!");
 		}
 
-		std::cout << "Do you want to add or remove users from this course(1/2) : " << std::endl;
+		std::cout << "Do you want to add, remove users from course or change course name ('1'/'2'/'3') : " << std::endl;
 		std::string choice;
 		std::getline(std::cin, choice, '\n');
 		if (choice == "1") {
@@ -185,6 +192,12 @@ void Administrator::modifyCourses() {
 		}
 		else if (choice == "2") {
 			this->removeUserFromCourse();
+		}
+		else if (choice == "3") {
+			std::string newCourseName;
+			std::cout << "Enter new course name :" << std::endl;
+			std::getline(std::cin, newCourseName, '\n');
+			fs::rename(path / "KURSEVI" / courseName, path / "KURSEVI" /  newCourseName);
 		}
 		else {
 			throw std::exception("Unknown option, sorry!");
@@ -284,5 +297,95 @@ void Administrator::addUser() {
 
 //NA KRAJU ODRADITI OVU FUNKCIJU
 void Administrator::removeUser() {
+	std::string userName;
+	std::cout << "Enter user name of the user you want to remove: " << std::endl;
+	std::getline(std::cin, userName, '\n');
 
+	try {
+		if (!checkIfUserIsAlreadyInAFile(userName)) {
+			throw std::exception("User doesn't exist, so you can't remove non-existing user!");
+		}
+		rewriteUsersFile(userName);
+		rewriteCoursesFilesOrFriends(userName, "KURSEVI");
+		rewriteCoursesFilesOrFriends(userName, "STUDENTI");
+		removeUserFolder(userName);
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+
+}
+
+void Administrator::rewriteUsersFile(std::string userName) {
+	std::vector<User> users;
+	auto readFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
+	if (readFile) {
+		while (readFile.peek() != EOF) {
+			User u;
+			u.setTypePassword(true);
+			readFile >> u;
+			if (u.getUserName() != "" && u.getUserName() != userName) {
+				u.setTypePassword(false);
+				users.push_back(u);
+			}
+		}
+		readFile.close();
+	}
+
+	auto rewriteUsersFile = std::ofstream("./KORISNICI/Korisnici.txt", std::ios::out);
+	for (auto elem : users) {
+		elem.setTypePassword(true);
+		rewriteUsersFile << elem;
+		elem.setTypePassword(false);
+	}
+
+	rewriteUsersFile.close();
+}
+
+//CHATOVI OSTAJU POSTOJECI, KAO STO SU NA DRUSTVENIM MREZAMA
+void Administrator::rewriteCoursesFilesOrFriends(std::string userName, std::string folderName) {
+	for (auto const& entry : fs::directory_iterator(path / folderName)) {
+		std::string subFolderName = entry.path().filename().string();
+
+		if (subFolderName != "FRIENDREQUESTS.TXT" && subFolderName != "FRIENDS.TXT" && subFolderName != "CHATS") {
+			for (auto const& entryIN : fs::directory_iterator(path / folderName / subFolderName)) {
+				std::string fileName = entryIN.path().filename().string();
+				auto readCourseFile = std::ifstream("./" + folderName + "/" + subFolderName + "/" + fileName, std::ios::in);
+				std::vector<User> usersData;
+				if (readCourseFile) {
+					while (readCourseFile.peek() != EOF) {
+						User u;
+						readCourseFile >> u;
+						if (u.getUserName() != "" && u.getUserName() != userName) {
+							usersData.push_back(u);
+						}
+					}
+					readCourseFile.close();
+				}
+				auto rewriteCourseFile = std::ofstream("./" + folderName + "/" + subFolderName + "/" + fileName, std::ios::out);
+				for (auto elem : usersData) {
+					rewriteCourseFile << elem;
+				}
+				rewriteCourseFile.close();
+			}
+		}	
+	}
+}
+
+void Administrator::removeUserFolder(std::string userName) {
+	fs::remove_all(path / "STUDENTI" / userName);
+}
+
+void Administrator::showAllUsers() const {
+	auto readUsers = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
+	if (readUsers) {
+		while (readUsers.peek() != EOF) {
+			User u;
+			readUsers >> u;
+			if (u.getUserName() != "") {
+				std::cout << u;
+			}
+		}
+		readUsers.close();
+	}
 }
