@@ -38,19 +38,24 @@ void Administrator::addUserToCourse() {
 			throw std::exception("Course doesn't exist!");
 		}
 		checkCourse.close();
-		std::cout << "Enter new user name: " << std::endl;
+		std::cout << "Enter user name: " << std::endl;
 		std::string userName, password, type; 
 		std::getline(std::cin, userName, '\n');
 
+		Student s(userName);
+
 		if (!checkIfUserIsAlreadyInAFile(userName)) {
 			throw std::exception("Can't add a user you didn't create!");
+		}
+		if (s.isGraded(courseName)) {
+			throw std::exception("This student is already graded, so you can't add him/her to the course!");
 		}
 
 		//std::cout << "Enter password: " << std::endl;
 		//std::getline(std::cin, password, '\n');
 		std::cout << "Is it Student or Lecturer: " << std::endl;
 		std::getline(std::cin, type, '\n');
-		Student s(userName);
+
 
 		if (s.checkIfIsEitherStudentOrLecturer(courseName)) {
 			throw std::exception("Person already exists in this course!");
@@ -94,6 +99,12 @@ void Administrator::removeUserFromCourse() {
 		std::cout << "Enter existing user name or 'Lecturer' to remove lecturer: " << std::endl;
 		std::string userName;
 		std::getline(std::cin, userName, '\n');
+
+		if (userName == "Lecturer") {
+			auto writeOver = std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt", std::ios::out);
+			writeOver.close();
+			throw std::exception("Lecturer removed!");
+		}
 
 		if (!checkIfUserIsAlreadyInAFile(userName)) {
 			throw std::exception("Can't remove user that doesn't exist!");
@@ -267,6 +278,7 @@ void Administrator::modifyUsers() {
 	}
 }
 
+//DODAJEMO NOVOG KORISNIKA
 void Administrator::addUser() {
 	std::string userName;
 	std::cout << "Enter user name for new user: " << std::endl;
@@ -295,7 +307,7 @@ void Administrator::addUser() {
 	}
 }
 
-//NA KRAJU ODRADITI OVU FUNKCIJU
+//IZBACUJEMO KORISNIKA IZ SVIH MOGUCIH STAVKI, OSIM CHATOVA
 void Administrator::removeUser() {
 	std::string userName;
 	std::cout << "Enter user name of the user you want to remove: " << std::endl;
@@ -316,6 +328,7 @@ void Administrator::removeUser() {
 
 }
 
+//PREPISUJEMO FAJL SA KORISNICIMA
 void Administrator::rewriteUsersFile(std::string userName) {
 	std::vector<User> users;
 	auto readFile = std::ifstream("./KORISNICI/Korisnici.txt", std::ios::in);
@@ -342,7 +355,7 @@ void Administrator::rewriteUsersFile(std::string userName) {
 	rewriteUsersFile.close();
 }
 
-//CHATOVI OSTAJU POSTOJECI, KAO STO SU NA DRUSTVENIM MREZAMA
+//CHATOVI OSTAJU POSTOJECI, KAO STO SU NA DRUSTVENIM MREZAMA, SVE OSTALO SE BRISE
 void Administrator::rewriteCoursesFilesOrFriends(std::string userName, std::string folderName) {
 	for (auto const& entry : fs::directory_iterator(path / folderName)) {
 		std::string subFolderName = entry.path().filename().string();

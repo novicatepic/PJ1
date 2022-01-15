@@ -50,7 +50,10 @@ void Student::signToCourse(std::string courseName) const noexcept(false) {
 			throw std::exception("Student/Lecturer is already inside this course!");
 		}
 		if (checkIfRequestIsAlreadyMade(courseName, this->getUserName())) {
-			throw std::exception("You've already made a request, wait for the professor to accept it!");
+			throw std::exception("You've already made a request, wait for the lecturer to accept it!");
+		}
+		if (isGraded(courseName)) {
+			throw std::exception("You've already finished this course, no need to do it again!");
 		}
 
 		auto writeToCourse = std::ofstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt", std::ios::out | std::ios::app);

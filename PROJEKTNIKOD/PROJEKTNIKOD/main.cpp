@@ -63,8 +63,14 @@ int main() {
 	if (openFileForTheFirstTime) {
 		std::string option;
 		do {
+			std::cout << "--exit to finish this program, anything else to continue working: " << std::endl;
+			std::getline(std::cin, option, '\n');
+
+			if (option == "--exit") {
+				break;
+			}
+
 			CoreUser userSign = sign();
-			std::cout << "--exit to finish this program" << std::endl;
 			if (userSign.getUserName() != "") {	
 				std::string userCourseInput;
 				if (!userSign.checkIfIsAdmin(userSign.getUserName())) {
@@ -146,6 +152,9 @@ int main() {
 					std::cout << "You aren't on this course, but here are your options: " << std::endl;
 					std::string internOption;
 					helpForStudentFunc(userSign.getUserName());
+				}
+				else if (option == "--exit") {
+
 				}
 				else {
 					std::cout << "Your account doesn't exist" << std::endl;

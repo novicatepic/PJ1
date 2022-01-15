@@ -211,7 +211,7 @@ void Lecturer::writeGrade() const {
 				writeToCourseFile << s;
 				writeToCourseFile.close();
 				auto writeGrade = std::ofstream("./STUDENTI/" + studentName + "/OCJENE.txt", std::ios::out | std::ios::app);
-				writeGrade << c.getTypeOfCourse() << ":" << courseName << ":" << grade << std::endl;
+				writeGrade << courseName << ":" << grade << std::endl;
 				//writeGrade << s;
 				//writeGrade << grade;
 				writeGrade.close();

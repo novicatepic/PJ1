@@ -5,6 +5,11 @@
 #include "Administrator.h"
 #include "Student.h"
 
+//DA SE NE BI DUPLIRAO KOD U MEJNU
+//JER JEDNOM IMAM PRVO POKRETANJE PROGRAMA, TAD SE KREIRA ADMINISTRATOR
+//I KASNIJE SE KORISNIK MOZE PRIJAVITI KORISNIK KAO ADMIN
+//IMA ISTE FUNKCIONALNOSTI
+
 void administratorMainWork(std::string userName, std::string password) {
 
 	std::string choice;

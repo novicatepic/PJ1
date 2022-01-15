@@ -7,7 +7,6 @@
 
 namespace fs = std::filesystem;
 
-
 Course::Course(std::string courseName, std::string typeOfCourse, double minimumCourseGrade) : courseName(courseName), typeOfCourse(typeOfCourse), 	minimumCourseGrade(minimumCourseGrade){
 	auto openCourse = std::ifstream("./KURSEVI/" + courseName + "/STUDENTI.txt", std::ios::in);
 	if (!openCourse) {
@@ -17,7 +16,7 @@ Course::Course(std::string courseName, std::string typeOfCourse, double minimumC
 		std::ofstream("./KURSEVI/" + courseName + "/PREDAVAC.txt");
 		std::ofstream("./KURSEVI/" + courseName + "/STUDENTI.txt");
 		std::ofstream("./KURSEVI/" + courseName + "/ZAHTJEVI.txt");
-
+		std::ofstream("./KURSEVI/" + courseName + "/POLOZILI.txt");
 		/*std::ofstream writeTypeOfCourse = std::ofstream("./KURSEVI/" + courseName + "/" + typeOfCourse + ".txt", std::ios::out | std::ios::app);
 		writeTypeOfCourse << typeOfCourse << std::endl;
 		writeTypeOfCourse << minimumCourseGrade << std::endl;
@@ -141,12 +140,12 @@ std::set<Student> Course::findUnionIntersectionDifference() {
 		else if (choice == "2") {
 			readFromCourse = std::ifstream("./KURSEVI/" + this->courseName + "/POLOZILI.txt", std::ios::in);
 			readFromCourse2 = std::ifstream("./KURSEVI/" + courseName + "/POLOZILI.txt", std::ios::in);
-			if (!readFromCourse ) {
+			/*if (!readFromCourse) {
 				auto makeNew = std::ofstream("./KURSEVI/" + this->courseName + "/POLOZILI.txt");
 			}
 			if (!readFromCourse2) {
 				auto makeNew2 = std::fstream("./KURSEVI/" + courseName + "/POLOZILI.txt");
-			}
+			}*/
 		}
 		else {
 			throw std::exception("It must be either 1 for current students or 2 for students that finished this course!");
@@ -184,10 +183,27 @@ std::set<Student> Course::findUnionIntersectionDifference() {
 				set2.cbegin(), set2.cend(),
 				std::inserter(resVector, resVector.begin()));
 		}
+		//NE RADI SET DIFFERENCE, MORA SE NA SILU
 		else if (userInput == "Difference") {
-			std::set_difference(set1.cbegin(), set1.cend(),
+			/*std::set_difference(set1.cbegin(), set1.cend(),
 				set2.cbegin(), set2.cend(),
-				std::inserter(resVector, resVector.begin()));
+				std::inserter(resVector, resVector.begin())); NE RADI IZ NEKOG RAZLOGA*/
+			std::set<Student>::iterator studentIterator;
+			for (auto iterator1 = set1.begin(); iterator1 != set1.end(); iterator1++) {
+				for (auto iterator2 = set2.begin(); iterator2 != set2.end(); iterator2++) {
+					if (std::find(set1.begin(), set1.end(), *iterator2) == set1.end()) {
+						//std::cout << *iterator1;
+						resVector.insert(*iterator2);
+					}
+				}
+			}
+			for (auto iterator1 = set2.begin(); iterator1 != set2.end(); iterator1++) {
+				for (auto iterator2 = set1.begin(); iterator2 != set1.end(); iterator2++) {
+					if (std::find(set2.begin(), set2.end(), *iterator2) == set2.end()) {
+						resVector.insert(*iterator2);
+					}
+				}
+			}
 		}
 		else {
 			throw std::exception("Input must be Union or Intersection or Difference");
@@ -214,7 +230,7 @@ std::string Course::userInput2() const {
 }
 
 std::string Course::userInput3() const {
-	std::cout << "1 for students that are goint to the course, 2 for students that finished the course :" << std::endl;
+	std::cout << "1 for students that are going to the course, 2 for students that finished the course :" << std::endl;
 	std::string answer;
 	std::getline(std::cin, answer, '\n');
 	return answer;

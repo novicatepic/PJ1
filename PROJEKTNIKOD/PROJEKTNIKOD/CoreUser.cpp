@@ -285,3 +285,20 @@ void CoreUser::listCourses() const {
 	for (auto const& entry : fs::directory_iterator(path / "KURSEVI")) 
 		std::cout << entry.path().filename() << std::endl;
 }
+
+bool CoreUser::isGraded(std::string courseName) const {
+	auto openCourseFile = std::ifstream("./KURSEVI/" + courseName + "/POLOZILI.txt", std::ios::in);
+	if (openCourseFile) {
+		while (openCourseFile.good()) {
+			CoreUser readUser;
+			openCourseFile >> readUser;
+			if (readUser.getUserName() != "" && readUser.getUserName() == this->userName) {
+				return true;
+			}
+		}
+
+		openCourseFile.close();
+	}
+
+	return false;
+}
