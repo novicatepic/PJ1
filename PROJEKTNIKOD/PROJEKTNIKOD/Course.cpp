@@ -195,12 +195,13 @@ std::set<Student> Course::findUnionIntersectionDifference() {
 					resVector.insert(*iterator);
 			}
 
-			for (auto iterator = set2.begin(); iterator != set2.end(); iterator++) {
+			//BESPOTREBNO
+			/*for (auto iterator = set2.begin(); iterator != set2.end(); iterator++) {
 				if (std::find(set1.begin(), set1.end(), *iterator) != set1.end() &&
-					std::find(resVector.begin(), resVector.end(), *iterator) != resVector.end()) {
+					std::find(resVector.begin(), resVector.end(), *iterator) == resVector.end()) {
 					resVector.insert(*iterator);
 				}					
-			}
+			}*/
 
 		}
 		//NE RADI SET DIFFERENCE, MORA SE NA SILU
@@ -221,21 +222,21 @@ std::set<Student> Course::findUnionIntersectionDifference() {
 				}
 			}
 
-			for (auto iterator1 = set1.begin(); iterator1 != set1.end(); iterator1++) {
+			//for (auto iterator1 = set1.begin(); iterator1 != set1.end(); iterator1++) {
 				for (auto iterator2 = set2.begin(); iterator2 != set2.end(); iterator2++) {
 					if (std::find(set1.begin(), set1.end(), *iterator2) == set1.end()) {
 						//std::cout << *iterator1;
 						resVector.insert(*iterator2);
 					}
 				}
-			}
-			for (auto iterator1 = set2.begin(); iterator1 != set2.end(); iterator1++) {
+			//}
+			//for (auto iterator1 = set2.begin(); iterator1 != set2.end(); iterator1++) {
 				for (auto iterator2 = set1.begin(); iterator2 != set1.end(); iterator2++) {
 					if (std::find(set2.begin(), set2.end(), *iterator2) == set2.end()) {
 						resVector.insert(*iterator2);
 					}
 				}
-			}
+			//}
 		}
 		else {
 			throw std::exception("Input must be Union or Intersection or Difference");
