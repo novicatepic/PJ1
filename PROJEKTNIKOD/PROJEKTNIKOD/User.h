@@ -12,7 +12,11 @@ public:
 
 	User(std::string userName = "", std::string password = "");
 
+
 	//OPERATORI PREKLOPLJENI PREVASHODNO ZA UNIJU, INTERSEKCIJU, PRESJEK
+	//S OBZIROM DA UNIJA, INTERSEKCIJA I PRESJEK U NEKIM SLUCAJEVIMA NE RADE 
+	//ONDA SAM RUCNO IMPLEMENTIRAO
+	//OSTAVIO SAM OPERATORE IAKO SU BESPOTREBNI
 	bool operator==(const User& other) const;
 	bool operator!=(const User& other) const;
 	//bool operator>(const User& other) const;

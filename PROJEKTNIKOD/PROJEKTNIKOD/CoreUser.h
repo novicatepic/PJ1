@@ -102,11 +102,15 @@ public:
 	//PROVJERA DA LI JE KORISNIK ADMINISTRATOR U SISTEMU
 	bool checkIfIsAdmin(std::string name) const;
 
+
+
 protected:
+
+
+
 	//PROVJERA DA LI KORISNIK POSTOJI U SISTEMU
 	bool checkUserName() const;
 
-	//DUPLIRANE DVIJE ISTE FUNKCIJE
 	bool checkIfUserIsAlreadyInAFile(std::string userName) const;
 	bool checkUserName(std::string name) const;
 

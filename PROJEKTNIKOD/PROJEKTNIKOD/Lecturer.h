@@ -31,6 +31,7 @@ public:
 public:
 	//POMOCNE FUNKCIJE DA SE VIDI KOLIKO STUDENATA I KOLIKO PREDAVACA IMA
 	//IMPLEMENTACIJA U Lecturer.cpp
+	//POMOCNE SAMO ZA ISPIS U MAINU, NEBITNE FUNKCIJE
 	friend size_t howManyStudents(std::string courseName);
 	friend size_t howManyLecturers(std::string courseName);
 };
