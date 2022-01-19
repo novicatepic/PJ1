@@ -172,23 +172,55 @@ std::set<Student> Course::findUnionIntersectionDifference() {
 		}
 
 		std::string userInput = userInput2();
-
+		//IZ NEKOG RAZLOGA NE RADI STL BIBLIOTEKA
 		if (userInput == "Union") {
-			std::set_union(set2.cbegin(), set2.cend(),
+			/*std::set_union(set2.cbegin(), set2.cend(),
 				set1.cbegin(), set1.cend(),
-				std::inserter(resVector, resVector.begin()));
+				std::inserter(resVector, resVector.begin()));*/
+			for (auto iterator = set1.begin(); iterator != set1.end(); iterator++) {
+				resVector.insert(*iterator);
+			}
+			for (auto iterator = set2.begin(); iterator != set2.end(); iterator++) {
+				if (std::find(set1.begin(), set1.end(), *iterator) == set1.end()) {
+					resVector.insert(*iterator);
+				}
+			}
 		}
 		else if (userInput == "Intersection") {
-			std::set_intersection(set1.cbegin(), set1.cend(),
+			/*std::set_intersection(set1.cbegin(), set1.cend(),
 				set2.cbegin(), set2.cend(),
-				std::inserter(resVector, resVector.begin()));
+				std::inserter(resVector, resVector.begin()));*/
+			for (auto iterator = set1.begin(); iterator != set1.end(); iterator++) {
+				if(std::find(set2.begin(), set2.end(), *iterator) != set2.end())
+					resVector.insert(*iterator);
+			}
+
+			for (auto iterator = set2.begin(); iterator != set2.end(); iterator++) {
+				if (std::find(set1.begin(), set1.end(), *iterator) != set1.end() &&
+					std::find(resVector.begin(), resVector.end(), *iterator) != resVector.end()) {
+					resVector.insert(*iterator);
+				}					
+			}
+
 		}
 		//NE RADI SET DIFFERENCE, MORA SE NA SILU
 		else if (userInput == "Difference") {
 			/*std::set_difference(set1.cbegin(), set1.cend(),
 				set2.cbegin(), set2.cend(),
 				std::inserter(resVector, resVector.begin())); NE RADI IZ NEKOG RAZLOGA*/
-			std::set<Student>::iterator studentIterator;
+
+			if (set1.size() == 0) {
+				for (auto iterator = set2.begin(); iterator != set2.end(); iterator++) {
+					resVector.insert(*iterator);
+				}
+			}
+
+			if (set2.size() == 0) {
+				for (auto iterator = set1.begin(); iterator != set1.end(); iterator++) {
+					resVector.insert(*iterator);
+				}
+			}
+
 			for (auto iterator1 = set1.begin(); iterator1 != set1.end(); iterator1++) {
 				for (auto iterator2 = set2.begin(); iterator2 != set2.end(); iterator2++) {
 					if (std::find(set1.begin(), set1.end(), *iterator2) == set1.end()) {
