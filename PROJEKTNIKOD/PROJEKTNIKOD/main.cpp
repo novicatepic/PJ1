@@ -97,6 +97,7 @@ int main() {
 						std::cout << "[5] to text friend" << std::endl;
 						std::cout << "[6] to check friend requests" << std::endl;
 						std::cout << "[7] to send friend request" << std::endl;
+						std::cout << "[8] to see chat history with someone" << std::endl;
 						std::cout << "Enter your option: " << std::endl;
 						std::getline(std::cin, internOption, '\n');
 						if (internOption == "0") {
@@ -132,6 +133,9 @@ int main() {
 							std::string potentialFriendName;
 							std::getline(std::cin, potentialFriendName, '\n');
 							l.sendFriendRequest(potentialFriendName);
+						}
+						else if (internOption == "8") {
+							l.printChatWithFriend();
 						}
 						else if (internOption == "--logout") {
 

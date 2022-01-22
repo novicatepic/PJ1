@@ -27,6 +27,7 @@ void helpForStudentFunc(std::string userName) {
 		std::cout << "[4] to check friend requests" << std::endl;
 		std::cout << "[5] to send friend request" << std::endl;
 		std::cout << "[6] to sign to a course" << std::endl;
+		std::cout << "[7] to see chat history" << std::endl;
 		std::getline(std::cin, internOption, '\n');
 		if (internOption == "1") {
 			s.checkInbox();
@@ -60,6 +61,9 @@ void helpForStudentFunc(std::string userName) {
 			std::string courseName;
 			std::getline(std::cin, courseName, '\n');
 			s.signToCourse(courseName);
+		}
+		else if (internOption == "7") {
+			s.printChatWithFriend();
 		}
 
 	} while (internOption != "--logout");

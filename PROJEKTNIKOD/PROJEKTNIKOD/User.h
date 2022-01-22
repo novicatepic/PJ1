@@ -43,7 +43,7 @@ public:
 	//I POTENCIJALNO PRIHVATANJE NEKOG OD ZAHTJEVA
 	void checkFriendRequests() const;
 
-
+	void printChatWithFriend() const;
 
 protected:
 	//PROVJERA DA LI JE KORISNIK VEC POSLAO ZAHTJEV ZA PRIJATELJSTVO, DA SE NE DUPLIRA
@@ -51,4 +51,5 @@ protected:
 
 	//VRACANJE VECTORA SVIH KORISNIKA
 	std::vector<User> returnUsers();
+
 };

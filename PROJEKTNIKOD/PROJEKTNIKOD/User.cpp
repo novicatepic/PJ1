@@ -176,6 +176,9 @@ void User::sendFriendRequest(std::string userName) const {
 		if (checkIfFriendRequestIsAlreadyMade(userName)) {
 			throw std::exception("You've already made a request, wait!");
 		}
+		if (checkIfIsAlreadyAFriend(userName)) {
+			throw std::exception("This person is already your friend!");
+		}
 		auto openFriendFile = std::ofstream("./STUDENTI/" + userName + "/" + "FRIENDREQUESTS.TXT", std::ios::out | std::ios::app);
 		if (openFriendFile) {
 			openFriendFile << *this;
@@ -291,4 +294,29 @@ bool User::checkIfIsAlreadyAFriend(std::string friendName) const {
 
 	return false;
 
+}
+
+void User::printChatWithFriend() const {
+	std::string friendName;
+	std::cout << "Here are your friends: " << std::endl;
+	showFriends();
+	std::cout << "Enter name of the friend you want to see chat history: " << std::endl;
+	std::getline(std::cin, friendName, '\n');
+	try {
+		if (!checkIfIsAlreadyAFriend(friendName)) {
+			throw std::exception("This person is not your friend or he/she doesn't exist!");
+		}
+		auto openChatFile = std::ifstream("./STUDENTI/" + friendName + "/CHATS/" + this->getUserName() + ".TXT", std::ios::in);
+		if (openChatFile) {
+			while (openChatFile.good()) {
+				std::string stringRead;
+				std::getline(openChatFile, stringRead, '\n');
+				std::cout << stringRead << std::endl;
+			}
+			openChatFile.close();
+		}
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
 }

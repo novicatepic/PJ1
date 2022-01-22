@@ -360,7 +360,8 @@ void Administrator::rewriteCoursesFilesOrFriends(std::string userName, std::stri
 	for (auto const& entry : fs::directory_iterator(path / folderName)) {
 		std::string subFolderName = entry.path().filename().string();
 
-		if (subFolderName != "FRIENDREQUESTS.TXT" && subFolderName != "FRIENDS.TXT" && subFolderName != "CHATS") {
+		if (subFolderName != "FRIENDREQUESTS.TXT" && subFolderName != "FRIENDS.TXT" && subFolderName != "CHATS"
+			&& subFolderName != "OCJENE.TXT" && subFolderName != "ODSLUSANI.TXT") {
 			for (auto const& entryIN : fs::directory_iterator(path / folderName / subFolderName)) {
 				std::string fileName = entryIN.path().filename().string();
 				auto readCourseFile = std::ifstream("./" + folderName + "/" + subFolderName + "/" + fileName, std::ios::in);
