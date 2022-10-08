@@ -7,6 +7,6 @@ Administrator of the system can add, modify or remove courses and users. Data pe
 
 It is possible to compare two courses in the application: find union, intersection or difference between sets of students that attend a specific course, or students that passed an exam. Also, it is possible to filter messages in inbox. Filtering is done by using a specific string to search a message.
 
-Last two paragraphs in PJ1 2021—22 Projekti zadatak.pdf are not implemented in this project.
+Last two paragraphs in PJ1 2021—22 Projektni zadatak.pdf are not implemented in this project.
 Programming language used for this project is C++. Only standard library and STL were allowed in this project and test data was required so the application could be tested.
-If you want to check out specification in Serbian language, read PJ1 2021—22 Projekti zadatak.pdf.
+If you want to check out specification in Serbian language, read PJ1 2021—22 Projektni zadatak.pdf.
