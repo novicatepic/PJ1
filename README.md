@@ -1,12 +1,19 @@
-# PJ1-project
+# C++ course-Project
 
-This project is about a platform for students and it is a console application.
-User of the system has username and password and user can attend multiple courses. In each of the course user can be a student or a teacher. Student can send a request to attend a course which has to be accepted by teacher on that course. Each user can be a friend with any of the other users. To become a friend with other users, concrete user has to send them a friend request, and other user who received that request can either accept that request or decline it. If he accepted the request, than two users become friends. User can send message to other user in the system only if two of them are friends. Also, every student can chat with teachers, if the student is assigned to those courses. Messages are saved in the inbox of the user. The main idea of the program can be shown in four steps: 1) application starts, 2) user A enters credentials and is allowed to use the system if the credentials are valid, 3) user A sends a message to user B and logs out of the system, 4) user B signs in and checks a message that user A sent.
+This project involves the development of a platform for students, implemented as a console application.
 
-Administrator of the system can add, modify or remove courses and users. Data persistence is enabled in the system, so the state of the system is saved even if application closes. After opening the application, serialized data are loaded and data in the system is the same as it was before closing the application.
+Users of the system are required to have a username and password. They can enroll in multiple courses, where each course may have either student or teacher roles. Students can request to join a course, and their request must be approved by the respective teacher of that course. Users can establish friendships with other users by sending friend requests. When a user receives a friend request, they can either accept or decline it. Upon acceptance, the two users become friends. Messaging between users is only possible if they are friends. Students can also communicate with teachers, but only for courses in which they are enrolled. Message records are stored in the user's inbox.
 
-It is possible to compare two courses in the application: find union, intersection or difference between sets of students that attend a specific course, or students that passed an exam. Also, it is possible to filter messages in inbox. Filtering is done by using a specific string to search a message.
+The program's main flow can be summarized in four steps:
 
-Last two paragraphs in PJ1 2021—22 Projektni zadatak.pdf are not implemented in this project.
-Programming language used for this project is C++. Only standard library and STL were allowed in this project and test data was required so the application could be tested.
-If you want to check out specification in Serbian language, read PJ1 2021—22 Projektni zadatak.pdf.
+The application starts.
+User A logs in with valid credentials, gaining access to the system.
+User A sends a message to User B and then logs out.
+User B logs in and checks the received message from User A.
+Administrators of the system have the authority to add, modify, or remove courses and users. The system incorporates data persistence, ensuring that the system state is preserved even if the application is closed. Serialized data is loaded upon reopening the application, maintaining the previous state.
+
+The application provides functionality to compare two courses, including finding the union, intersection, or difference between sets of students attending a specific course or those who have passed an exam. Additionally, users can filter messages in their inbox using specific search strings.
+
+Please note that the last two paragraphs described in "PJ1 2021—22 Projektni zadatak.pdf" have not been implemented in this project.
+
+The programming language used for this project is C++. Only the standard library and STL were utilized, and test data was integrated to facilitate testing. For the Serbian language specification, you can refer to "PJ1 2021—22 Projektni zadatak.pdf."
